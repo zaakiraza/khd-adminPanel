@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "Name": "Ali Raza",
+    "Father_Name": "Ahmed Raza",
+    "DOB": "2011-05-10",
+    "Whatsapp_No": "+923001234567",
+    "Alternative_No": "+923451234567",
+    "Address": "Street 1, Lahore",
+    "City": "Lahore",
+    "Country": "Pakistan",
+    "Marj_E_Taqleed": "Ayatullah Sistani",
+    "Class": "VI",
+    "Result": "85%"
+  },
+  {
+    "id": 2,
+    "Name": "Fatima Noor",
+    "Father_Name": "Rizwan Noor",
+    "DOB": "2012-03-12",
+    "Whatsapp_No": "+923112223344",
+    "Alternative_No": "+923332223344",
+    "Address": "Street 2, Karachi",
+    "City": "Karachi",
+    "Country": "Pakistan",
+    "Marj_E_Taqleed": "Ayatullah Khamenei",
+    "Class": "Class 10",
+    "Result": "78%"
+  }
+]
