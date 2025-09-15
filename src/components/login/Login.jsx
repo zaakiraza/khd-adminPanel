@@ -8,12 +8,19 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const BASEURL = import.meta.env.VITE_BASEURL;
   const logo = "/logo.png";
 
   const formHandler = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    if (!email || !password) {
+      setMessage("All fields are required");
+      setIsSubmitting(false);
+      return;
+    }
     try {
       const api = await axios.post(`${BASEURL}/auth/admin_login`, {
         email,
@@ -28,6 +35,8 @@ function Login() {
       setMessage(api.data.message);
     } catch (error) {
       setMessage(error.response.data.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -38,7 +47,7 @@ function Login() {
           <img src={logo} alt="" />
           <h1>Khuddam User Login</h1>
         </div>
-        <form className="form_user">
+        <form className="form_user" onSubmit={formHandler}>
           <input
             type="email"
             placeholder="Enter Email"
@@ -49,8 +58,13 @@ function Login() {
             placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* <button className="btnLogin" onClick={formHandler}> */}
-          <button className="btnLogin">Go</button>
+          <input
+            className="btnLogin"
+            type="submit"
+            value={isSubmitting ? "Go..." : "Go"}
+            disabled={isSubmitting}
+            style={isSubmitting ? { opacity: 0.7, cursor: "not-allowed" } : {}}
+          />
         </form>
         <p>{message}</p>
       </div>
