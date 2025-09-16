@@ -1,0 +1,122 @@
+.sidebar {
+  background-color: #2eab2e;
+  color: #ffffff;
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 14px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.sidebar__title {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.sidebar__nav {
+  margin-top: 10px;
+  overflow-y: auto;
+}
+
+.sidebar__section {
+  margin-bottom: 8px;
+}
+
+.sidebar__toggle {
+  width: 100%;
+  background: transparent;
+  color: inherit;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.sidebar__toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar__chevron {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar__toggle.is-open .sidebar__chevron {
+  transform: rotate(90deg);
+}
+
+.sidebar__submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 6px 8px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+
+.sidebar__submenu.is-open {
+  max-height: 300px;
+}
+
+.sidebar__link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: #e9ffea;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.sidebar__link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar__link.is-active {
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Bold section label when open */
+.sidebar__toggle.is-open {
+  font-weight: 700;
+}
+
+/* Layout for Dashboard main area */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f7faf7;
+}
+
+.dashboard__main {
+  flex: 1;
+  padding: 24px;
+}
+
+.dashboard__placeholder {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+}

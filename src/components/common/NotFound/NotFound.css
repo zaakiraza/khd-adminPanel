@@ -1,0 +1,119 @@
+.nf-container {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem 1rem;
+	text-align: center;
+	gap: 1.25rem;
+	background: linear-gradient(135deg,#0f172a,#1e293b);
+	color: #f1f5f9;
+	font-family: 'Inter', system-ui, sans-serif;
+}
+
+.nf-code {
+	font-size: clamp(4rem, 18vw, 9rem);
+	font-weight: 700;
+	letter-spacing: -4px;
+	background: linear-gradient(90deg,#38bdf8,#6366f1,#8b5cf6);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	margin: 0;
+	line-height: 1;
+	user-select: none;
+}
+
+.nf-card {
+	background: rgba(255,255,255,0.05);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 18px;
+	padding: 1.75rem 1.5rem 2rem;
+	max-width: 560px;
+	width: 100%;
+	box-shadow: 0 8px 30px -8px rgba(0,0,0,0.5);
+}
+
+.nf-title {
+	font-size: clamp(1.75rem,4vw,2.4rem);
+	margin: 0 0 .75rem;
+	font-weight: 600;
+}
+
+.nf-message {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+.nf-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin-top: 0.75rem;
+	justify-content: center;
+}
+
+.nf-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 0.95rem;
+	font-weight: 500;
+	padding: 0.75rem 1.15rem;
+	border-radius: 10px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	text-decoration: none;
+	line-height: 1.1;
+	transition: background .25s, color .25s, border-color .25s, transform .2s, box-shadow .25s;
+	position: relative;
+}
+
+.nf-btn-primary {
+	background: linear-gradient(90deg,#6366f1,#8b5cf6);
+	color: #fff;
+	box-shadow: 0 4px 18px -4px rgba(99,102,241,0.6);
+}
+
+.nf-btn-secondary {
+	background: rgba(255,255,255,0.08);
+	color: #e2e8f0;
+	border-color: rgba(255,255,255,0.18);
+}
+
+.nf-btn-alt {
+	background: rgba(255,255,255,0.06);
+}
+
+.nf-btn:hover, .nf-btn:focus-visible {
+	transform: translateY(-2px);
+	outline: none;
+}
+
+.nf-btn-primary:hover, .nf-btn-primary:focus-visible {
+	box-shadow: 0 6px 24px -6px rgba(99,102,241,0.75);
+}
+
+.nf-btn-secondary:hover, .nf-btn-secondary:focus-visible, .nf-btn-alt:hover, .nf-btn-alt:focus-visible {
+	background: rgba(255,255,255,0.14);
+}
+
+.nf-subtle {
+	font-size: 0.85rem;
+	opacity: 0.75;
+	margin-top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.nf-btn { transition: none; }
+	.nf-btn:hover, .nf-btn:focus-visible { transform: none; }
+}
+
+@media (max-height: 520px) {
+	.nf-container { padding-top: 1rem; padding-bottom: 1rem; }
+	.nf-code { font-size: clamp(3rem, 24vh, 6rem); }
+}
