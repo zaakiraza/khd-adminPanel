@@ -11,6 +11,7 @@
 
 .sidebar__brand {
   display: flex;
+  cursor: pointer;
   align-items: center;
   gap: 10px;
   padding: 6px 8px 14px 8px;
@@ -48,6 +49,7 @@
   padding: 10px 8px;
   cursor: pointer;
   border-radius: 6px;
+  font-size: 16px;
 }
 
 .sidebar__toggle:hover {
@@ -55,7 +57,7 @@
 }
 
 .sidebar__chevron {
-  font-size: 14px;
+  font-size: 25px;
   transition: transform 0.2s ease;
 }
 
@@ -66,7 +68,7 @@
 .sidebar__submenu {
   list-style: none;
   margin: 0;
-  padding: 0 0 6px 8px;
+  padding: 0 0 0px 8px;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.25s ease;

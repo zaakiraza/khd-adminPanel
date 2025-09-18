@@ -74,12 +74,15 @@ export default function Sidebar() {
     []
   );
 
+  const naviLink = () => {
+    window.location.href = "/dashboard";
+  };
+
   useEffect(() => {
     const path = location.pathname;
     const match = path.match(/\/dashboard\/([^/]+)/);
     if (match && match[1]) {
       const sectionSlug = match[1];
-      // Map slug to our section keys
       const slugToKey = {
         students: "students",
         attendance: "attendance",
@@ -101,8 +104,12 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar__brand">
-        <img src="/logo.png" alt="Khuddam" className="sidebar__logo" />
+      <div className="sidebar__brand" onClick={naviLink}>
+        <img
+          src="/logo.png"
+          alt="Khuddam"
+          className="sidebar__logo"
+        />
         <h1 className="sidebar__title">Khuddam Learning</h1>
       </div>
 
@@ -118,7 +125,9 @@ export default function Sidebar() {
                 aria-controls={`menu-${section.key}`}
               >
                 <span>{section.label}</span>
-                <span className="sidebar__chevron" aria-hidden>▸</span>
+                <span className="sidebar__chevron" aria-hidden>
+                  ▸
+                </span>
               </button>
 
               <ul
@@ -129,7 +138,11 @@ export default function Sidebar() {
                 {section.items.map((item) => {
                   const to = buildPath(section.label, item);
                   return (
-                    <li key={item} role="menuitem" onClick={(e) => e.stopPropagation()}>
+                    <li
+                      key={item}
+                      role="menuitem"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <NavLink
                         to={to}
                         className={({ isActive }) =>
