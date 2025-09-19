@@ -11,8 +11,8 @@
 }
 
 .heading h1 {
-    margin: 0;
-    font-size: 24px;
+  margin: 0;
+  font-size: 24px;
 }
 
 table {
@@ -31,7 +31,8 @@ thead tr {
   font-weight: bold;
 }
 
-th, td {
+th,
+td {
   padding: 12px 15px;
   border-bottom: 1px solid #ddd;
 }
@@ -49,23 +50,53 @@ tbody tr:last-of-type {
 }
 
 td i {
-    cursor: pointer;
-    transition: color 0.3s ease;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 td .fa-pen {
-    color: #2eab2e;
+  color: #2eab2e;
 }
 
 td .fa-pen:hover {
-    color: green;
+  color: green;
 }
 
 td .fa-trash {
-    color: red;
+  color: red;
 }
 
 td .fa-trash:hover {
-    color: #c82333;
+  color: #c82333;
 }
 
+.extras {
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pagination button {
+  background-color: #2eab2e;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination span {
+  padding: 0 5px;
+}
+
+.limithandle {
+  padding-right: 10px;
+}
+
+.limithandle select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}

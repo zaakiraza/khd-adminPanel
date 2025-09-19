@@ -7,20 +7,27 @@ export default function StudentDetails() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(30);
+  const [totalPages, setTotalPages] = useState(0);
   const fetchStudents = async () => {
     setLoading(true);
     setError(null);
     try {
-      const api = await axios.get(`${baseURL}/users/active?page=1&limit=10`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const api = await axios.get(
+        `${baseURL}/users/active?page=${page}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       if (api.status === 200) {
         setStudents(api.data.data.users);
+        setTotalPages(api.data.data.pagination.totalPages);
       }
     } catch (e) {
-      setError("Failed to fetch students.");
+      setError(e.response.data.message);
       if (e.response && e.response.status === 403) {
         alert(e.response.data.message);
         window.location.href = "/";
@@ -32,12 +39,45 @@ export default function StudentDetails() {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [page, limit]);
 
   return (
     <section className="container">
       <div className="heading">
-        <h1>Students currently enrolled</h1>
+        <h1>Students Currently Active</h1>
+      </div>
+      <div className="extras">
+        <div className="pagination">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          >
+            Previous
+          </button>
+          <span>
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={page === totalPages}
+          >
+            Next
+          </button>
+        </div>
+        <div className="limithandle">
+          <label htmlFor="limit">Records per page: </label>
+          <select
+            name="limit"
+            id="limit"
+            value={limit}
+            onChange={(e) => setLimit(Number(e.target.value))}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={30}>30</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
       </div>
       <table>
         <thead>
