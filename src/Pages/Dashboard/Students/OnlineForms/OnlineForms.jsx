@@ -10,6 +10,50 @@ export default function OnlineForms() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(30);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  const handleDeleteStudent = async (studentId, studentName) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to reject the application for ${studentName}? This action cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const api = await axios.put(
+        `${baseURL}/users/update_application_status/${studentId}`,
+        { application_status: "rejected" },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (api.status === 200) {
+        // Remove the student from the current list
+        setStudents((prevStudents) =>
+          prevStudents.filter((student) => student._id !== studentId)
+        );
+
+        // Update total users count
+        setTotalUsers((prevTotal) => prevTotal - 1);
+
+        alert("Application status updated to rejected successfully");
+      }
+    } catch (error) {
+      console.error("Error updating application status:", error);
+      if (error.response && error.response.status === 403) {
+        alert(error.response.data.message);
+        window.location.href = "/";
+      } else {
+        alert("Error updating application status. Please try again.");
+      }
+    }
+  };
+
   const fetchStudents = async () => {
     setLoading(true);
     setError(null);
@@ -25,6 +69,7 @@ export default function OnlineForms() {
       if (api.status === 200) {
         setStudents(api.data.data.users);
         setTotalPages(api.data.data.pagination.totalPages);
+        setTotalUsers(api.data.data.pagination.totalUsers);
       }
     } catch (e) {
       setError(e.response.data.message);
@@ -66,6 +111,9 @@ export default function OnlineForms() {
           </button>
         </div>
         <div className="limithandle">
+          <p>
+            records:<strong>{totalUsers}</strong>
+          </p>
           <label htmlFor="limit">Records per page: </label>
           <select
             name="limit"
@@ -86,6 +134,7 @@ export default function OnlineForms() {
             <th>Roll No</th>
             <th>Student Name</th>
             <th>Father Name</th>
+            <th>Age</th>
             <th>Phone</th>
             <th></th>
             <th></th>
@@ -110,12 +159,33 @@ export default function OnlineForms() {
                 <td>{student.personal_info.rollNo}</td>
                 <td>{student.personal_info.first_name}</td>
                 <td>{student.personal_info.father_name}</td>
+                <td
+                  style={{
+                    color:
+                      student.personal_info.age > 19 ||
+                      student.personal_info.age < 9
+                        ? "Red"
+                        : "black",
+                  }}
+                >
+                  {student.personal_info.age}
+                </td>
                 <td>{student.personal_info.whatsapp_no}</td>
                 <td>
                   <i className="fa-solid fa-pen"></i>
                 </td>
                 <td>
-                  <i className="fa-solid fa-trash"></i>
+                  <i
+                    className="fa-solid fa-trash"
+                    style={{ cursor: "pointer", color: "#dc3545" }}
+                    onClick={() =>
+                      handleDeleteStudent(
+                        student._id,
+                        student.personal_info.first_name
+                      )
+                    }
+                    title="Reject Application"
+                  ></i>
                 </td>
               </tr>
             ))

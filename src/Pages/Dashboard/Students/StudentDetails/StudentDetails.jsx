@@ -10,12 +10,14 @@ export default function StudentDetails() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(30);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [enrolled_class, setEnrolled_class] = useState("");
   const fetchStudents = async () => {
     setLoading(true);
     setError(null);
     try {
       const api = await axios.get(
-        `${baseURL}/users/active?page=${page}&limit=${limit}`,
+        `${baseURL}/users/active?enrolled_class=${enrolled_class}&page=${page}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -25,6 +27,7 @@ export default function StudentDetails() {
       if (api.status === 200) {
         setStudents(api.data.data.users);
         setTotalPages(api.data.data.pagination.totalPages);
+        setTotalUsers(api.data.data.pagination.totalUsers);
       }
     } catch (e) {
       setError(e.response.data.message);
@@ -65,6 +68,9 @@ export default function StudentDetails() {
           </button>
         </div>
         <div className="limithandle">
+          <p>
+            records:<strong>{totalUsers}</strong>
+          </p>
           <label htmlFor="limit">Records per page: </label>
           <select
             name="limit"
@@ -76,6 +82,19 @@ export default function StudentDetails() {
             <option value={20}>20</option>
             <option value={30}>30</option>
             <option value={50}>50</option>
+          </select>
+        </div>
+      </div>
+      <div className="filters">
+        <div className="filter">
+          <select name="enrolled_class" id="enrolled_class">
+            <option value="">-- Group - All --</option>
+            <option value="Atfaal-Awal">Atfaal-Awal</option>
+            <option value="Atfaal-doam">Atfaal-doam</option>
+            <option value="Awwal">Awwal</option>
+            <option value="Doam">Doam</option>
+            <option value="Soam">Soam</option>
+            <option value="Chaharum">Chaharum</option>
           </select>
         </div>
       </div>
@@ -111,11 +130,11 @@ export default function StudentDetails() {
                 <td>{student.personal_info.father_name}</td>
                 <td>{student.personal_info.whatsapp_no}</td>
                 <td>
-                  <i className="fa-solid fa-pen"></i>
+                  <i className="fa-solid fa-eye"></i>
                 </td>
-                <td>
+                {/* <td>
                   <i className="fa-solid fa-trash"></i>
-                </td>
+                </td> */}
               </tr>
             ))
           )}

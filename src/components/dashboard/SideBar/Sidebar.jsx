@@ -105,11 +105,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand" onClick={naviLink}>
-        <img
-          src="/logo.png"
-          alt="Khuddam"
-          className="sidebar__logo"
-        />
+        <img src="/logo.png" alt="Khuddam" className="sidebar__logo" />
         <h1 className="sidebar__title">Khuddam Learning</h1>
       </div>
 

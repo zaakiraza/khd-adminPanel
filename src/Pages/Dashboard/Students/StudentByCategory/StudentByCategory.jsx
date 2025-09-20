@@ -10,12 +10,17 @@ export default function StudentByCategory() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(30);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [enrolledYear, setEnrolledYear] = useState("");
+  const [verified, setVerified] = useState("");
+  const [status, setStatus] = useState("");
+  const [application_status, setApplication_status] = useState("");
   const fetchStudents = async () => {
     setLoading(true);
     setError(null);
     try {
       const api = await axios.get(
-        `${baseURL}/users/all?page=${page}&limit=${limit}`,
+        `${baseURL}/users/all?verified=${verified}&status=${status}&enrolled_year=${enrolledYear}&limit=${limit}&page=${page}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -25,6 +30,7 @@ export default function StudentByCategory() {
       if (api.status === 200) {
         setStudents(api.data.data.users);
         setTotalPages(api.data.data.pagination.totalPages);
+        setTotalUsers(api.data.data.pagination.totalUsers);
       }
     } catch (e) {
       setError(e.response.data.message);
@@ -39,12 +45,12 @@ export default function StudentByCategory() {
 
   useEffect(() => {
     fetchStudents();
-  }, [page, limit]);
+  }, [page, limit, status, verified, enrolledYear, application_status]);
 
   return (
     <section className="container">
       <div className="heading">
-        <h1>Students Currently Active</h1>
+        <h1>All Students By Category</h1>
       </div>
       <div className="extras">
         <div className="pagination">
@@ -65,6 +71,9 @@ export default function StudentByCategory() {
           </button>
         </div>
         <div className="limithandle">
+          <p>
+            records:<strong>{totalUsers}</strong>
+          </p>
           <label htmlFor="limit">Records per page: </label>
           <select
             name="limit"
@@ -87,35 +96,57 @@ export default function StudentByCategory() {
       </div>
       <div className="filters">
         <div className="filter">
-          <select name="verified" id="verified">
-            <option value="">-- select --</option>
-            <option value="1">Verified</option>
-            <option value="2">Not Verified</option>
+          <select
+            name="enrolled_year"
+            id="enrolled_year"
+            value={enrolledYear}
+            onChange={(e) => setEnrolledYear(e.target.value)}
+          >
+            <option value="">-- Enrolled Year - All --</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
           </select>
         </div>
         <div className="filter">
-          <select name="status" id="status">
-            <option value="">-- select status --</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
+          <select
+            name="verified"
+            id="verified"
+            value={verified}
+            onChange={(e) => setVerified(e.target.value)}
+          >
+            <option value="">-- Verifyed - All --</option>
+            <option value="true">Verified</option>
+            <option value="false">Not Verified</option>
           </select>
         </div>
         <div className="filter">
-          <select name="application_status" id="application_status">
-            <option value="all">all</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
+          <select
+            name="status"
+            id="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="">-- Status - All --</option>
+            <option value="active">Active</option>
+            <option value="inactive">In-Active</option>
           </select>
         </div>
         <div className="filter">
-          <select name="class" id="class">
-            <option value="all">all</option>
-            <option value="Atfaal_Awal">Atfaal Awal</option>
-            <option value="Atfaal_doam">Atfaal doam</option>
-            <option value="Awwal">Awwal</option>
-            <option value="Doam">Doam</option>
-            <option value="Soam">Soam</option>
-            <option value="Chaharum">Chaharum</option>
+          <select
+            name="application_status"
+            id="application_status"
+            value={application_status}
+            onChange={(e) => {
+              setApplication_status(e.target.value);
+              setStatus("inactive");
+            }}
+          >
+            <option value="">-- Application Status - All --</option>
+            <option value="accepted">accepted</option>
+            <option value="rejected">rejected</option>
           </select>
         </div>
       </div>

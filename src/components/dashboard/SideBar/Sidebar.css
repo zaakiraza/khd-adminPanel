@@ -34,10 +34,14 @@
 .sidebar__nav {
   margin-top: 10px;
   overflow-y: auto;
+  direction: rtl;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
 }
 
 .sidebar__section {
   margin-bottom: 8px;
+  direction: ltr;
 }
 
 .sidebar__toggle {

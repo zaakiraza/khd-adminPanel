@@ -54,20 +54,12 @@ td i {
   transition: color 0.3s ease;
 }
 
-td .fa-pen {
+td .fa-eye {
   color: #2eab2e;
 }
 
-td .fa-pen:hover {
+td .fa-eye:hover {
   color: green;
-}
-
-td .fa-trash {
-  color: red;
-}
-
-td .fa-trash:hover {
-  color: #c82333;
 }
 
 .extras {
@@ -92,6 +84,11 @@ td .fa-trash:hover {
 }
 
 .limithandle {
+  padding-right: 10px;
+}
+
+.limithandle p{
+  display: inline; 
   padding-right: 10px;
 }
 
