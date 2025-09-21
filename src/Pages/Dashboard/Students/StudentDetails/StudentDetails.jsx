@@ -42,7 +42,7 @@ export default function StudentDetails() {
 
   useEffect(() => {
     fetchStudents();
-  }, [page, limit]);
+  }, [page, limit, enrolled_class]);
 
   return (
     <section className="container">
@@ -53,6 +53,7 @@ export default function StudentDetails() {
         <div className="pagination">
           <button
             disabled={page === 1}
+            style={{ cursor: page === 1 ? "not-allowed" : "pointer" }}
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           >
             Previous
@@ -63,6 +64,7 @@ export default function StudentDetails() {
           <button
             onClick={() => setPage((prev) => prev + 1)}
             disabled={page === totalPages}
+            style={{ cursor: page === totalPages ? "not-allowed" : "pointer" }}
           >
             Next
           </button>
@@ -87,7 +89,13 @@ export default function StudentDetails() {
       </div>
       <div className="filters">
         <div className="filter">
-          <select name="enrolled_class" id="enrolled_class">
+          <select
+            name="enrolled_class"
+            id="enrolled_class"
+            onChange={(e) => {
+              setEnrolled_class(e.target.value);
+            }}
+          >
             <option value="">-- Group - All --</option>
             <option value="Atfaal-Awal">Atfaal-Awal</option>
             <option value="Atfaal-doam">Atfaal-doam</option>

@@ -15,12 +15,28 @@ export default function StudentByCategory() {
   const [verified, setVerified] = useState("");
   const [status, setStatus] = useState("");
   const [application_status, setApplication_status] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+
+  console.log(typeof searchInput);
+
+  const checkforEmpty = (value) => {
+    if (
+      value === null ||
+      value === undefined ||
+      value.trim() === "" ||
+      value.trim().length < 3
+    ) {
+      return true;
+    }
+    fetchStudents();
+  };
+
   const fetchStudents = async () => {
     setLoading(true);
     setError(null);
     try {
       const api = await axios.get(
-        `${baseURL}/users/all?verified=${verified}&status=${status}&enrolled_year=${enrolledYear}&limit=${limit}&page=${page}`,
+        `${baseURL}/users/all?search=${searchInput}&verified=${verified}&status=${status}&enrolled_year=${enrolledYear}&application_status=${application_status}&limit=${limit}&page=${page}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -57,6 +73,7 @@ export default function StudentByCategory() {
           <button
             disabled={page === 1}
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            style={{ cursor: page === 1 ? "not-allowed" : "pointer" }}
           >
             Previous
           </button>
@@ -66,6 +83,7 @@ export default function StudentByCategory() {
           <button
             onClick={() => setPage((prev) => prev + 1)}
             disabled={page === totalPages}
+            style={{ cursor: page === totalPages ? "not-allowed" : "pointer" }}
           >
             Next
           </button>
@@ -89,8 +107,15 @@ export default function StudentByCategory() {
         </div>
       </div>
       <div className="search">
-        <input type="text" placeholder="Search by name, email, phone Number" />
-        <button>
+        <input
+          type="text"
+          placeholder="Search by Name, Email, Phone Number"
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key == "Enter") checkforEmpty(searchInput);
+          }}
+        />
+        <button onClick={() => checkforEmpty(searchInput)}>
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
@@ -141,12 +166,14 @@ export default function StudentByCategory() {
             value={application_status}
             onChange={(e) => {
               setApplication_status(e.target.value);
-              setStatus("inactive");
+              e.target.value == "rejected"
+                ? setStatus("inactive")
+                : setStatus("");
             }}
           >
             <option value="">-- Application Status - All --</option>
-            <option value="accepted">accepted</option>
-            <option value="rejected">rejected</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
       </div>

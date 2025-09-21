@@ -97,6 +97,7 @@ export default function OnlineForms() {
             disabled={page === 1}
             cursor="not-allowed"
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            style={{ cursor: page === 1 ? "not-allowed" : "pointer" }}
           >
             Previous
           </button>
@@ -106,6 +107,7 @@ export default function OnlineForms() {
           <button
             onClick={() => setPage((prev) => prev + 1)}
             disabled={page === totalPages}
+            style={{ cursor: page === totalPages ? "not-allowed" : "pointer" }}
           >
             Next
           </button>
