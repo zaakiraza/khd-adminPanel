@@ -68,7 +68,9 @@ function Login() {
               title={showPassword ? "Hide password" : "Show password"}
             >
               <i
-                className={showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}
+                className={
+                  showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"
+                }
                 aria-hidden="true"
               ></i>
             </button>
