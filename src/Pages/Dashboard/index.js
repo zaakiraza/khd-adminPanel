@@ -1,6 +1,9 @@
 export { default as StudentDetails } from "./Students/StudentDetails/StudentDetails";
+export { default as StudentDetailView } from "./Students/StudentDetails/StudentDetailView";
 export { default as OnlineForms } from "./Students/OnlineForms/OnlineForms";
+export { default as OnlineFormDetailView } from "./Students/OnlineForms/OnlineFormDetailView";
 export { default as StudentByCategory } from "./Students/StudentByCategory/StudentByCategory";
+export { default as StudentByCategoryDetailView } from "./Students/StudentByCategory/StudentByCategoryDetailView";
 export { default as ManageStatus } from "./Students/ManageStatus/ManageStatus";
 
 export { default as StudentAttendance } from "./Attendance/StudentAttendance/StudentAttendance";

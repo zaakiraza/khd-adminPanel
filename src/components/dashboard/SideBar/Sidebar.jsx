@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation,useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 const menuConfig = [
@@ -59,6 +59,7 @@ const menuConfig = [
 export default function Sidebar() {
   const [openKey, setOpenKey] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const labelToKey = useMemo(
     () => ({
@@ -75,7 +76,7 @@ export default function Sidebar() {
   );
 
   const naviLink = () => {
-    window.location.href = "/dashboard";
+    navigate("/dashboard");
   };
 
   useEffect(() => {

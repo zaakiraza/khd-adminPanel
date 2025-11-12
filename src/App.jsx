@@ -6,8 +6,11 @@ import DashboardData from "./components/common/DashboardData/DashboardData";
 import AuthRoute from "./routes/AuthRoute";
 import {
   StudentDetails,
+  StudentDetailView,
   OnlineForms,
+  OnlineFormDetailView,
   StudentByCategory,
+  StudentByCategoryDetailView,
   ManageStatus,
   StudentAttendance,
   AttendanceByCategory,
@@ -51,10 +54,22 @@ function App() {
               path="students/student-details"
               element={<StudentDetails />}
             />
+            <Route
+              path="students/student-details/:id"
+              element={<StudentDetailView />}
+            />
             <Route path="students/online-forms" element={<OnlineForms />} />
+            <Route
+              path="students/online-forms/:id"
+              element={<OnlineFormDetailView />}
+            />
             <Route
               path="students/student-by-category"
               element={<StudentByCategory />}
+            />
+            <Route
+              path="students/student-by-category/:id"
+              element={<StudentByCategoryDetailView />}
             />
             <Route path="students/manage-status" element={<ManageStatus />} />
 

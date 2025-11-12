@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../../components/common/Toast/ToastContext";
 import "./StudentDetails.css";
 
 export default function StudentDetails() {
   const baseURL = import.meta.env.VITE_BASEURL;
+  const navigate = useNavigate();
+  const { showError } = useToast();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,8 +36,8 @@ export default function StudentDetails() {
     } catch (e) {
       setError(e.response.data.message);
       if (e.response && e.response.status === 403) {
-        alert(e.response.data.message);
-        window.location.href = "/";
+        showError(e.response.data.message);
+        navigate("/");
       }
     } finally {
       setLoading(false);
@@ -138,7 +142,11 @@ export default function StudentDetails() {
                 <td>{student.personal_info.father_name}</td>
                 <td>{student.personal_info.whatsapp_no}</td>
                 <td>
-                  <i className="fa-solid fa-eye"></i>
+                  <i 
+                    className="fa-solid fa-eye"
+                    onClick={() => navigate(`/dashboard/students/student-details/${student._id}`)}
+                    title="View Details"
+                  ></i>
                 </td>
                 {/* <td>
                   <i className="fa-solid fa-trash"></i>

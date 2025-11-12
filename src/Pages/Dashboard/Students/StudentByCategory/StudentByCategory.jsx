@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useToast } from "../../../../components/common/Toast/ToastContext";
 import "./StudentByCategory.css";
 
 export default function StudentByCategory() {
   const baseURL = import.meta.env.VITE_BASEURL;
+  const { showError, showSuccess, showWarning } = useToast();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,6 +19,7 @@ export default function StudentByCategory() {
   const [status, setStatus] = useState("");
   const [application_status, setApplication_status] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
 
   console.log(typeof searchInput);
 
@@ -51,8 +55,8 @@ export default function StudentByCategory() {
     } catch (e) {
       setError(e.response.data.message);
       if (e.response && e.response.status === 403) {
-        alert(e.response.data.message);
-        window.location.href = "/";
+        showError(e.response.data.message);
+        navigate("/");
       }
     } finally {
       setLoading(false);
@@ -62,6 +66,34 @@ export default function StudentByCategory() {
   useEffect(() => {
     fetchStudents();
   }, [page, limit, status, verified, enrolledYear, application_status]);
+
+  const handleEdit = (studentId) => {
+    navigate(`/dashboard/students/student-by-category/${studentId}`);
+  };
+
+  const handleDelete = async (studentId, studentName) => {
+    if (!window.confirm(`Are you sure you want to make ${studentName} inactive?`)) {
+      return;
+    }
+
+    try {
+      const api = await axios.put(
+        `${baseURL}/users/update_application_status/${studentId}`,
+        { application_status: "rejected" },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (api.status === 200) {
+        showSuccess("Student marked as inactive successfully!");
+        fetchStudents();
+      }
+    } catch (e) {
+      showError(e.response?.data?.message || "Failed to update student status");
+    }
+  };
 
   return (
     <section className="container">
@@ -209,10 +241,18 @@ export default function StudentByCategory() {
                 <td>{student.personal_info.father_name}</td>
                 <td>{student.personal_info.whatsapp_no}</td>
                 <td>
-                  <i className="fa-solid fa-pen"></i>
+                  <i 
+                    className="fa-solid fa-pen"
+                    onClick={() => handleEdit(student._id)}
+                    style={{ cursor: "pointer", color: "#007bff" }}
+                  ></i>
                 </td>
                 <td>
-                  <i className="fa-solid fa-trash"></i>
+                  <i 
+                    className="fa-solid fa-trash"
+                    onClick={() => handleDelete(student._id, student.personal_info.first_name)}
+                    style={{ cursor: "pointer", color: "#dc3545" }}
+                  ></i>
                 </td>
               </tr>
             ))

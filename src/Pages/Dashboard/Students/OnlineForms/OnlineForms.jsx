@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useToast } from "../../../../components/common/Toast/ToastContext";
 import "./OnlineForms.css";
 
 export default function OnlineForms() {
   const baseURL = import.meta.env.VITE_BASEURL;
+  const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,15 +45,15 @@ export default function OnlineForms() {
         // Update total users count
         setTotalUsers((prevTotal) => prevTotal - 1);
 
-        alert("Application status updated to rejected successfully");
+        showSuccess("Application status updated to rejected successfully");
       }
     } catch (error) {
       console.error("Error updating application status:", error);
       if (error.response && error.response.status === 403) {
-        alert(error.response.data.message);
-        window.location.href = "/";
+        showError(error.response.data.message);
+        navigate("/");
       } else {
-        alert("Error updating application status. Please try again.");
+        showError("Error updating application status. Please try again.");
       }
     }
   };
@@ -74,8 +78,8 @@ export default function OnlineForms() {
     } catch (e) {
       setError(e.response.data.message);
       if (e.response && e.response.status === 403) {
-        alert(e.response.data.message);
-        window.location.href = "/";
+        showError(e.response.data.message);
+        navigate("/");
       }
     } finally {
       setLoading(false);
@@ -174,7 +178,12 @@ export default function OnlineForms() {
                 </td>
                 <td>{student.personal_info.whatsapp_no}</td>
                 <td>
-                  <i className="fa-solid fa-pen"></i>
+                  <i 
+                    className="fa-solid fa-pen"
+                    onClick={() => navigate(`/dashboard/students/online-forms/${student._id}`)}
+                    style={{ cursor: "pointer" }}
+                    title="View/Edit Details"
+                  ></i>
                 </td>
                 <td>
                   <i
