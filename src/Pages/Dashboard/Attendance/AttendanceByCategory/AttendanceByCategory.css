@@ -1,6 +1,6 @@
 .attendance-category-container {
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2eab2e 0%, #1e7e34 100%);
   min-height: 100vh;
 }
 
@@ -41,9 +41,9 @@
 
 .toggle-btn {
   padding: 0.8rem 2rem;
-  border: 2px solid #667eea;
+  border: 2px solid #2eab2e;
   background: white;
-  color: #667eea;
+  color: #2eab2e;
   border-radius: 25px;
   cursor: pointer;
   font-weight: 600;
@@ -59,9 +59,9 @@
 }
 
 .toggle-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2eab2e 0%, #1e7e34 100%);
   color: white;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(46, 171, 46, 0.4);
 }
 
 .filter-inputs {
@@ -86,7 +86,7 @@
 }
 
 .filter-group label i {
-  color: #667eea;
+  color: #2eab2e;
 }
 
 .filter-group select,
@@ -101,8 +101,8 @@
 .filter-group select:focus,
 .filter-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #2eab2e;
+  box-shadow: 0 0 0 3px rgba(46, 171, 46, 0.1);
 }
 
 .filter-actions {
@@ -127,13 +127,13 @@
 }
 
 .search-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2eab2e 0%, #1e7e34 100%);
   color: white;
 }
 
 .search-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(46, 171, 46, 0.4);
 }
 
 .search-btn:disabled {
@@ -170,7 +170,7 @@
 }
 
 .statistics-card h3 i {
-  color: #667eea;
+  color: #2eab2e;
 }
 
 .stats-grid {
@@ -273,7 +273,7 @@
 }
 
 .results-section > h3 i {
-  color: #667eea;
+  color: #2eab2e;
 }
 
 .record-count {
@@ -294,8 +294,8 @@
 }
 
 .attendance-record-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  border-color: #2eab2e;
+  box-shadow: 0 5px 15px rgba(46, 171, 46, 0.1);
 }
 
 .record-header {
@@ -317,13 +317,13 @@
 }
 
 .record-info h4 i {
-  color: #667eea;
+  color: #2eab2e;
 }
 
 .class-badge {
   display: inline-block;
   padding: 0.3rem 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2eab2e 0%, #1e7e34 100%);
   color: white;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -380,7 +380,7 @@
 }
 
 .students-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2eab2e 0%, #1e7e34 100%);
   color: white;
 }
 
@@ -466,7 +466,7 @@
 }
 
 .loading-state i.fa-spinner {
-  color: #667eea;
+  color: #2eab2e;
 }
 
 /* Responsive Design */
