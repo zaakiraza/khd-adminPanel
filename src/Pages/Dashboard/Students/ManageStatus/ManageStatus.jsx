@@ -172,8 +172,6 @@ export default function ManageStatus() {
           const student = students.find((s) => s._id === studentId);
           const studentAge = student.personal_info.age;
 
-          console.log("Student data:", student);
-
           // Find matching age criteria
           const matchingCriteria = ageCriteria.find(
             (criteria) =>
@@ -185,63 +183,7 @@ export default function ManageStatus() {
             throw new Error(`No age criteria matched for student age ${studentAge}`);
           }
 
-          // Ensure all required fields have values with defaults for missing data
-          const payload = {
-            personal_info: {
-              first_name: student.personal_info.first_name,
-              last_name: student.personal_info.last_name,
-              father_name: student.personal_info.father_name,
-              gender: student.personal_info.gender,
-              whatsapp_no: student.personal_info.whatsapp_no,
-              dob: student.personal_info.dob,
-              age: student.personal_info.age,
-              alternative_no: student.personal_info.alternative_no || student.personal_info.whatsapp_no,
-              address: student.personal_info.address,
-              city: student.personal_info.city,
-              country: student.personal_info.country,
-              img_URL: student.personal_info.img_URL,
-              doc_img: student.personal_info.doc_img,
-              marj_e_taqleed: student.personal_info.marj_e_taqleed,
-              enrolled_class: matchingCriteria.targetClass,
-              enrolled_year: promotionYear,
-            },
-            guardian_info: student.guardian_info || {
-              name: "Not Provided",
-              relationship: "Guardian",
-              email: "notprovided@example.com",
-              whatsapp_no: student.personal_info.whatsapp_no,
-              address: student.personal_info.address,
-              CNIC: "00000-0000000-0"
-            },
-            academic_progress: {
-              academic_class: student.academic_progress?.academic_class || "Not Assigned",
-              institute_name: student.academic_progress?.institute_name || "Khuddam Learning",
-              inProgress: false,
-              result: student.academic_progress?.result || "Pending"
-            },
-            previous_madrassa: student.previous_madrassa || { name: "N/A", topic: "N/A" },
-            bank_info: student.bank_info || {
-              bank_name: "Not Provided",
-              account_number: "0000000000",
-              account_title: "Not Provided",
-              branch: "N/A"
-            },
-          };
-
-          console.log("Payload being sent:", payload);
-
-          // Update personal info
-          await axios.put(
-            `${baseURL}/users/update_personal/${studentId}`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-
-          // Add to class history
+          // Add to class history (this will also update enrolled_class)
           const classHistoryPayload = {
             class_name: matchingCriteria.targetClass,
             year: promotionYear,
@@ -251,8 +193,6 @@ export default function ManageStatus() {
             repeat_count: 0,
             isCompleted: false,
           };
-
-          console.log("Class history payload:", classHistoryPayload);
 
           return axios.put(
             `${baseURL}/users/update_class_history/${studentId}`,
@@ -300,45 +240,7 @@ export default function ManageStatus() {
       try {
         // Promote each selected student
         const promises = selectedStudents.map(async (studentId) => {
-          const student = students.find((s) => s._id === studentId);
-
-          const payload = {
-            personal_info: {
-              first_name: student.personal_info.first_name,
-              last_name: student.personal_info.last_name,
-              father_name: student.personal_info.father_name,
-              gender: student.personal_info.gender,
-              whatsapp_no: student.personal_info.whatsapp_no,
-              dob: student.personal_info.dob,
-              age: student.personal_info.age,
-              alternative_no: student.personal_info.alternative_no,
-              address: student.personal_info.address,
-              city: student.personal_info.city,
-              country: student.personal_info.country,
-              img_URL: student.personal_info.img_URL,
-              doc_img: student.personal_info.doc_img,
-              marj_e_taqleed: student.personal_info.marj_e_taqleed,
-              enrolled_class: toClass,
-              enrolled_year: promotionYear,
-            },
-            guardian_info: student.guardian_info,
-            academic_progress: student.academic_progress,
-            previous_madrassa: student.previous_madrassa || { name: "", topic: "" },
-            bank_info: student.bank_info,
-          };
-
-          // Update personal info
-          await axios.put(
-            `${baseURL}/users/update_personal/${studentId}`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-
-          // Add to class history
+          // Add to class history (this will also update enrolled_class)
           const classHistoryPayload = {
             class_name: toClass,
             year: promotionYear,
@@ -348,7 +250,7 @@ export default function ManageStatus() {
             repeat_count: 0,
             isCompleted: false,
           };
-          console.log(classHistoryPayload);
+
           return axios.put(
             `${baseURL}/users/update_class_history/${studentId}`,
             classHistoryPayload,
