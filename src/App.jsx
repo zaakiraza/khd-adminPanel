@@ -23,6 +23,8 @@ import {
   Sessions,
   Classes,
   Schedule,
+  Assignments,
+  Quizzes,
   SendMessage,
   EmailMatter,
   SendMail,
@@ -103,6 +105,8 @@ function App() {
             <Route path="academics/sessions" element={<Sessions />} />
             <Route path="academics/classes" element={<Classes />} />
             <Route path="academics/schedule" element={<Schedule />} />
+            <Route path="academics/assignments" element={<Assignments />} />
+            <Route path="academics/quizzes" element={<Quizzes />} />
 
             {/* Communications */}
             <Route

@@ -31,7 +31,7 @@ const menuConfig = [
   {
     key: "academics",
     label: "Academics",
-    items: ["TimeTable", "Sessions", "Classes", "Schedule"],
+    items: ["TimeTable", "Sessions", "Classes", "Schedule", "Assignments", "Quizzes"],
   },
   {
     key: "communications",
@@ -199,6 +199,8 @@ function buildPath(sectionLabel, itemLabel) {
     Sessions: "sessions",
     Classes: "classes",
     Schedule: "schedule",
+    Assignments: "assignments",
+    Quizzes: "quizzes",
     "Send Message": "send-message",
     "Email Matter": "email-matter",
     "Send Mail": "send-mail",
