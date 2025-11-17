@@ -392,12 +392,20 @@ export default function Assignments() {
                   </button>
                 )}
                 {assignment.status === "published" && (
-                  <button
-                    className="action-btn close-btn"
-                    onClick={() => handleStatusUpdate(assignment._id, "closed")}
-                  >
-                    Close
-                  </button>
+                  <>
+                    <button
+                      className="action-btn unpublish-btn"
+                      onClick={() => handleStatusUpdate(assignment._id, "draft")}
+                    >
+                      Unpublish
+                    </button>
+                    <button
+                      className="action-btn close-btn"
+                      onClick={() => handleStatusUpdate(assignment._id, "closed")}
+                    >
+                      Close
+                    </button>
+                  </>
                 )}
                 <button
                   className="action-btn edit-btn"

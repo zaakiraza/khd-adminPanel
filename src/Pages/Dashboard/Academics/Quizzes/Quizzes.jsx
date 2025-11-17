@@ -416,12 +416,20 @@ export default function Quizzes() {
                   </button>
                 )}
                 {quiz.status === "published" && (
-                  <button
-                    className="action-btn start-btn"
-                    onClick={() => handleStatusUpdate(quiz._id, "ongoing")}
-                  >
-                    Start
-                  </button>
+                  <>
+                    <button
+                      className="action-btn unpublish-btn"
+                      onClick={() => handleStatusUpdate(quiz._id, "draft")}
+                    >
+                      Unpublish
+                    </button>
+                    <button
+                      className="action-btn start-btn"
+                      onClick={() => handleStatusUpdate(quiz._id, "ongoing")}
+                    >
+                      Start
+                    </button>
+                  </>
                 )}
                 {quiz.status === "ongoing" && (
                   <button

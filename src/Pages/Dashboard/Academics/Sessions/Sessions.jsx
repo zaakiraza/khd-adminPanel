@@ -112,8 +112,8 @@ export default function Sessions() {
 
   const handleToggleStatus = async (session) => {
     const endpoint = session.isActive
-      ? `/session/inactive/${session._id}`
-      : `/session/active/${session._id}`;
+      ? `/session/update/inactive/${session._id}`
+      : `/session/update/active/${session._id}`;
 
     try {
       const response = await axios.patch(`${baseURL}${endpoint}`, {}, {

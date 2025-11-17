@@ -291,6 +291,15 @@
   background: #218838;
 }
 
+.unpublish-btn {
+  background: #fd7e14;
+  color: white;
+}
+
+.unpublish-btn:hover {
+  background: #e8590c;
+}
+
 .close-btn {
   background: #dc3545;
   color: white;
