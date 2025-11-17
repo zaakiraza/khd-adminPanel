@@ -5,4 +5,5 @@ function AuthRoute() {
   return loginId ? <Outlet /> : <Navigate to="/" />;
 }
 
+// sadsdas
 export default AuthRoute;
