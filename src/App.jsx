@@ -1,9 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Login from "./Pages/login/Login";
 import NotFound from "./components/common/NotFound/NotFound";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
 import DashboardData from "./components/common/DashboardData/DashboardData";
 import AuthRoute from "./routes/AuthRoute";
+import { setNavigate, setupAxiosInterceptor } from "./utils/axiosInterceptor";
 import {
   StudentDetails,
   StudentDetailView,
@@ -39,6 +41,15 @@ import {
 
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Setup axios interceptor once when app mounts
+    setupAxiosInterceptor();
+    // Set the navigate function for the interceptor
+    setNavigate(navigate);
+  }, [navigate]);
+
   return (
     <>
       <Routes>

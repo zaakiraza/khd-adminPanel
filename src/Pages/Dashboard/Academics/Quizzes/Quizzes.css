@@ -656,3 +656,32 @@
     justify-content: flex-start;
   }
 }
+
+/* Question Options Display */
+.question-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.question-options .option {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #495057;
+}
+
+.question-options .option.correct {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  font-weight: 600;
+}
+
+.added-questions h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}

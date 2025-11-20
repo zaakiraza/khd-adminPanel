@@ -30,6 +30,7 @@ export default function Quizzes() {
     duration: "30",
     passing_marks: "40",
     questions: [],
+    status: "draft",
   });
 
   const [currentQuestion, setCurrentQuestion] = useState({
@@ -180,8 +181,20 @@ export default function Quizzes() {
       end_time: quiz.end_time || "",
       duration: quiz.duration,
       passing_marks: quiz.passing_marks,
-      questions: quiz.questions || [],
+      status: quiz.status || "draft",
+      questions: [],
     });
+    // Load existing questions into the questions array for display in Step 2
+    if (quiz.questions && quiz.questions.length > 0) {
+      const loadedQuestions = quiz.questions.map(q => ({
+        question_text: q.question_text,
+        question_type: q.question_type,
+        options: q.options || [],
+        correct_answer: q.correct_answer || "",
+        marks: q.marks,
+      }));
+      setFormData(prev => ({ ...prev, questions: loadedQuestions }));
+    }
     setShowModal(true);
   };
 
@@ -233,6 +246,7 @@ export default function Quizzes() {
       duration: "30",
       passing_marks: "40",
       questions: [],
+      status: "draft",
     });
     setCurrentQuestion({
       question_text: "",
@@ -558,9 +572,19 @@ export default function Quizzes() {
                       <input
                         type="time"
                         value={formData.start_time}
-                        onChange={(e) =>
-                          setFormData({ ...formData, start_time: e.target.value })
-                        }
+                        onChange={(e) => {
+                          const newStartTime = e.target.value;
+                          setFormData({ ...formData, start_time: newStartTime });
+                          // Auto-calculate duration if end_time exists
+                          if (formData.end_time && newStartTime) {
+                            const start = new Date(`2000-01-01T${newStartTime}`);
+                            const end = new Date(`2000-01-01T${formData.end_time}`);
+                            const diffMinutes = Math.round((end - start) / 60000);
+                            if (diffMinutes > 0) {
+                              setFormData(prev => ({ ...prev, start_time: newStartTime, duration: diffMinutes.toString() }));
+                            }
+                          }
+                        }}
                         required
                       />
                     </div>
@@ -570,9 +594,19 @@ export default function Quizzes() {
                       <input
                         type="time"
                         value={formData.end_time}
-                        onChange={(e) =>
-                          setFormData({ ...formData, end_time: e.target.value })
-                        }
+                        onChange={(e) => {
+                          const newEndTime = e.target.value;
+                          setFormData({ ...formData, end_time: newEndTime });
+                          // Auto-calculate duration if start_time exists
+                          if (formData.start_time && newEndTime) {
+                            const start = new Date(`2000-01-01T${formData.start_time}`);
+                            const end = new Date(`2000-01-01T${newEndTime}`);
+                            const diffMinutes = Math.round((end - start) / 60000);
+                            if (diffMinutes > 0) {
+                              setFormData(prev => ({ ...prev, end_time: newEndTime, duration: diffMinutes.toString() }));
+                            }
+                          }
+                        }}
                         required
                       />
                     </div>
@@ -604,10 +638,24 @@ export default function Quizzes() {
                         required
                       />
                     </div>
+
+                    <div className="form-group">
+                      <label>Status *</label>
+                      <select
+                        value={formData.status}
+                        onChange={(e) =>
+                          setFormData({ ...formData, status: e.target.value })
+                        }
+                        required
+                      >
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                        <option value="closed">Closed</option>
+                      </select>
+                    </div>
                   </div>
 
-                  <div className="form-actions">
-                    <button type="button" onClick={handleCloseModal}>
+                  <div className="form-actions">\n                    <button type="button" onClick={handleCloseModal}>
                       Cancel
                     </button>
                     <button type="button" className="next-btn" onClick={() => setCurrentStep(2)}>
@@ -628,10 +676,12 @@ export default function Quizzes() {
                   {/* Added Questions List */}
                   {formData.questions.length > 0 && (
                     <div className="added-questions">
+                      <h4>Added Questions</h4>
                       {formData.questions.map((q, index) => (
                         <div key={index} className="question-item">
                           <div className="question-header">
                             <span className="question-number">Q{index + 1}</span>
+                            <span className="question-type">{q.question_type}</span>
                             <span className="question-marks">{q.marks} marks</span>
                             <button
                               type="button"
@@ -642,7 +692,18 @@ export default function Quizzes() {
                             </button>
                           </div>
                           <p className="question-text">{q.question_text}</p>
-                          <span className="question-type">{q.question_type}</span>
+                          {q.options && q.options.length > 0 && (
+                            <div className="question-options">
+                              {q.options.map((opt, i) => (
+                                <div
+                                  key={i}
+                                  className={`option ${opt.is_correct ? "correct" : ""}`}
+                                >
+                                  {opt.option_text} {opt.is_correct && "✓"}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

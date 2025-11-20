@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../../utils/api";
 import { useToast } from "../../../../components/common/Toast/ToastContext";
 import "./Assignments.css";
 
@@ -14,6 +14,18 @@ export default function Assignments() {
   const [editingAssignment, setEditingAssignment] = useState(null);
   const [missingAssignments, setMissingAssignments] = useState([]);
   const [showReminder, setShowReminder] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState({
+    question_text: "",
+    question_type: "multiple_choice",
+    options: [
+      { option_text: "", is_correct: false },
+      { option_text: "", is_correct: false },
+    ],
+    correct_answer: "",
+    marks: 1,
+  });
 
   const [filters, setFilters] = useState({
     class_id: "",
@@ -31,6 +43,7 @@ export default function Assignments() {
     total_marks: "100",
     week_number: "",
     year: new Date().getFullYear(),
+    status: "draft",
   });
 
   useEffect(() => {
@@ -42,7 +55,7 @@ export default function Assignments() {
   const fetchClasses = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${baseURL}/class/all?isActive=true`, {
+      const response = await api.get(`/class/all?isActive=true`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setClasses(response.data.data || []);
@@ -61,8 +74,8 @@ export default function Assignments() {
       if (filters.week_number)
         params.append("week_number", filters.week_number);
 
-      const response = await axios.get(
-        `${baseURL}/assignment?${params.toString()}`,
+      const response = await api.get(
+        `/assignment?${params.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -78,7 +91,7 @@ export default function Assignments() {
   const checkMissingAssignments = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${baseURL}/assignment/missing`, {
+      const response = await api.get(`/assignment/missing`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -100,18 +113,23 @@ export default function Assignments() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
+      
+      const payload = {
+        ...formData,
+        questions: questions,
+      };
 
       if (editingAssignment) {
-        await axios.put(
-          `${baseURL}/assignment/${editingAssignment._id}`,
-          formData,
+        await api.put(
+          `/assignment/${editingAssignment._id}`,
+          payload,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
         showSuccess("Assignment updated successfully");
       } else {
-        await axios.post(`${baseURL}/assignment`, formData, {
+        await api.post(`/assignment`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
         showSuccess("Assignment created successfully");
@@ -137,7 +155,9 @@ export default function Assignments() {
       total_marks: assignment.total_marks,
       week_number: assignment.week_number,
       year: assignment.year,
+      status: assignment.status || "draft",
     });
+    setQuestions(assignment.questions || []);
     setShowModal(true);
   };
 
@@ -147,7 +167,7 @@ export default function Assignments() {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`${baseURL}/assignment/${id}`, {
+      await api.delete(`/assignment/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       showSuccess("Assignment deleted successfully");
@@ -161,8 +181,8 @@ export default function Assignments() {
   const handleStatusUpdate = async (id, newStatus) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.patch(
-        `${baseURL}/assignment/${id}/status`,
+      await api.patch(
+        `/assignment/${id}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -178,6 +198,18 @@ export default function Assignments() {
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingAssignment(null);
+    setCurrentStep(1);
+    setQuestions([]);
+    setCurrentQuestion({
+      question_text: "",
+      question_type: "multiple_choice",
+      options: [
+        { option_text: "", is_correct: false },
+        { option_text: "", is_correct: false },
+      ],
+      correct_answer: "",
+      marks: 1,
+    });
     setFormData({
       title: "",
       class_id: "",
@@ -188,6 +220,7 @@ export default function Assignments() {
       total_marks: "100",
       week_number: "",
       year: new Date().getFullYear(),
+      status: "draft",
     });
   };
 
@@ -206,6 +239,115 @@ export default function Assignments() {
       week_number: "",
     });
     setTimeout(() => fetchAssignments(), 100);
+  };
+
+  // Question handlers
+  const handleAddQuestion = () => {
+    if (!currentQuestion.question_text) {
+      showError("Please enter question text");
+      return;
+    }
+
+    if (
+      currentQuestion.question_type === "multiple_choice" &&
+      !currentQuestion.options.some((opt) => opt.is_correct)
+    ) {
+      showError("Please select correct answer for multiple choice");
+      return;
+    }
+
+    if (
+      currentQuestion.question_type === "true_false" &&
+      !currentQuestion.options.some((opt) => opt.is_correct)
+    ) {
+      showError("Please select correct answer for true/false");
+      return;
+    }
+
+    setQuestions([...questions, { ...currentQuestion }]);
+    setCurrentQuestion({
+      question_text: "",
+      question_type: "multiple_choice",
+      options: [
+        { option_text: "", is_correct: false },
+        { option_text: "", is_correct: false },
+      ],
+      correct_answer: "",
+      marks: 1,
+    });
+    showSuccess("Question added successfully");
+  };
+
+  const handleRemoveQuestion = (index) => {
+    setQuestions(questions.filter((_, i) => i !== index));
+  };
+
+  const handleAddOption = () => {
+    setCurrentQuestion({
+      ...currentQuestion,
+      options: [
+        ...currentQuestion.options,
+        { option_text: "", is_correct: false },
+      ],
+    });
+  };
+
+  const handleRemoveOption = (index) => {
+    if (currentQuestion.options.length <= 2) {
+      showError("Must have at least 2 options");
+      return;
+    }
+    const newOptions = currentQuestion.options.filter((_, i) => i !== index);
+    setCurrentQuestion({ ...currentQuestion, options: newOptions });
+  };
+
+  const handleOptionChange = (index, field, value) => {
+    const newOptions = currentQuestion.options.map((opt, i) => {
+      if (i === index) {
+        if (field === "is_correct" && value) {
+          return { ...opt, [field]: value };
+        }
+        return { ...opt, [field]: value };
+      }
+      if (field === "is_correct" && value) {
+        return { ...opt, is_correct: false };
+      }
+      return opt;
+    });
+    setCurrentQuestion({ ...currentQuestion, options: newOptions });
+  };
+
+  const handleQuestionTypeChange = (type) => {
+    if (type === "true_false") {
+      setCurrentQuestion({
+        ...currentQuestion,
+        question_type: type,
+        options: [
+          { option_text: "True", is_correct: false },
+          { option_text: "False", is_correct: false },
+        ],
+      });
+    } else if (type === "short_answer" || type === "essay") {
+      setCurrentQuestion({
+        ...currentQuestion,
+        question_type: type,
+        options: [],
+        correct_answer: "",
+      });
+    } else {
+      setCurrentQuestion({
+        ...currentQuestion,
+        question_type: type,
+        options: [
+          { option_text: "", is_correct: false },
+          { option_text: "", is_correct: false },
+        ],
+      });
+    }
+  };
+
+  const getTotalMarks = () => {
+    return questions.reduce((sum, q) => sum + Number(q.marks), 0);
   };
 
   const getCurrentWeekNumber = () => {
@@ -431,151 +573,308 @@ export default function Assignments() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>
-                {editingAssignment ? "Edit Assignment" : "Add Assignment"}
+                {editingAssignment ? "Edit Assignment" : "Add Assignment"} - Step {currentStep} of 2
               </h2>
               <button className="close-btn" onClick={handleCloseModal}>
                 ×
               </button>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Title *</label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="form-row">
+            {currentStep === 1 && (
+              <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }}>
                 <div className="form-group">
-                  <label>Class *</label>
-                  <select
-                    value={formData.class_id}
-                    onChange={(e) =>
-                      setFormData({ ...formData, class_id: e.target.value })
-                    }
-                    required
-                  >
-                    <option value="">Select Class</option>
-                    {classes.map((cls) => (
-                      <option key={cls._id} value={cls._id}>
-                        {cls.class_name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Subject *</label>
+                  <label>Title *</label>
                   <input
                     type="text"
-                    value={formData.subject}
+                    value={formData.title}
                     onChange={(e) =>
-                      setFormData({ ...formData, subject: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Description *</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  rows="4"
-                  required
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Due Date *</label>
-                  <input
-                    type="date"
-                    value={formData.due_date}
-                    onChange={(e) =>
-                      setFormData({ ...formData, due_date: e.target.value })
+                      setFormData({ ...formData, title: e.target.value })
                     }
                     required
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>End Time *</label>
-                  <input
-                    type="time"
-                    value={formData.end_time}
-                    onChange={(e) =>
-                      setFormData({ ...formData, end_time: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-              </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Class *</label>
+                    <select
+                      value={formData.class_id}
+                      onChange={(e) =>
+                        setFormData({ ...formData, class_id: e.target.value })
+                      }
+                      required
+                    >
+                      <option value="">Select Class</option>
+                      {classes.map((cls) => (
+                        <option key={cls._id} value={cls._id}>
+                          {cls.class_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Total Marks *</label>
-                  <input
-                    type="number"
-                    value={formData.total_marks}
-                    onChange={(e) =>
-                      setFormData({ ...formData, total_marks: e.target.value })
-                    }
-                    min="1"
-                    required
-                  />
+                  <div className="form-group">
+                    <label>Subject *</label>
+                    <input
+                      type="text"
+                      value={formData.subject}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subject: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="form-group">
-                  <label>Week Number *</label>
-                  <input
-                    type="number"
-                    value={formData.week_number}
+                  <label>Description *</label>
+                  <textarea
+                    value={formData.description}
                     onChange={(e) =>
-                      setFormData({ ...formData, week_number: e.target.value })
+                      setFormData({ ...formData, description: e.target.value })
                     }
-                    min="1"
-                    max="52"
-                    placeholder={`Current: ${getCurrentWeekNumber()}`}
+                    rows="4"
                     required
                   />
                 </div>
-              </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Year *</label>
-                  <input
-                    type="number"
-                    value={formData.year}
-                    onChange={(e) =>
-                      setFormData({ ...formData, year: e.target.value })
-                    }
-                    min="2020"
-                    max="2030"
-                    required
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Due Date *</label>
+                    <input
+                      type="date"
+                      value={formData.due_date}
+                      onChange={(e) =>
+                        setFormData({ ...formData, due_date: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>End Time *</label>
+                    <input
+                      type="time"
+                      value={formData.end_time}
+                      onChange={(e) =>
+                        setFormData({ ...formData, end_time: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Week Number *</label>
+                    <input
+                      type="number"
+                      value={formData.week_number}
+                      onChange={(e) =>
+                        setFormData({ ...formData, week_number: e.target.value })
+                      }
+                      min="1"
+                      max="52"
+                      placeholder={`Current: ${getCurrentWeekNumber()}`}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Year *</label>
+                    <input
+                      type="number"
+                      value={formData.year}
+                      onChange={(e) =>
+                        setFormData({ ...formData, year: e.target.value })
+                      }
+                      min="2020"
+                      max="2030"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Status *</label>
+                    <select
+                      value={formData.status}
+                      onChange={(e) =>
+                        setFormData({ ...formData, status: e.target.value })
+                      }
+                      required
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-actions">\n                  <button type="button" onClick={handleCloseModal}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="submit-btn">
+                    Next: Add Questions
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {currentStep === 2 && (
+              <div className="questions-section">
+                <div className="questions-header">
+                  <h3>Add Questions (Optional)</h3>
+                  <p>Total Questions: {questions.length} | Total Marks: {getTotalMarks()}</p>
+                </div>
+
+                <div className="question-builder">
+                  <div className="form-group">
+                    <label>Question Type</label>
+                    <select
+                      value={currentQuestion.question_type}
+                      onChange={(e) => handleQuestionTypeChange(e.target.value)}
+                    >
+                      <option value="multiple_choice">Multiple Choice</option>
+                      <option value="true_false">True/False</option>
+                      <option value="short_answer">Short Answer</option>
+                      <option value="essay">Essay</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Question Text *</label>
+                    <textarea
+                      value={currentQuestion.question_text}
+                      onChange={(e) =>
+                        setCurrentQuestion({
+                          ...currentQuestion,
+                          question_text: e.target.value,
+                        })
+                      }
+                      rows="2"
+                      placeholder="Enter question"
+                    />
+                  </div>
+
+                  {(currentQuestion.question_type === "multiple_choice" ||
+                    currentQuestion.question_type === "true_false") && (
+                    <div className="options-section">
+                      <label>Options</label>
+                      {currentQuestion.options.map((option, index) => (
+                        <div key={index} className="option-item">
+                          <input
+                            type="text"
+                            value={option.option_text}
+                            onChange={(e) =>
+                              handleOptionChange(index, "option_text", e.target.value)
+                            }
+                            placeholder={`Option ${index + 1}`}
+                            disabled={currentQuestion.question_type === "true_false"}
+                          />
+                          <label className="checkbox-label">
+                            <input
+                              type="radio"
+                              name="correct_answer"
+                              checked={option.is_correct}
+                              onChange={(e) =>
+                                handleOptionChange(index, "is_correct", e.target.checked)
+                              }
+                            />
+                            Correct
+                          </label>
+                          {currentQuestion.question_type !== "true_false" && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveOption(index)}
+                              className="remove-option-btn"
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {currentQuestion.question_type === "multiple_choice" && (
+                        <button
+                          type="button"
+                          onClick={handleAddOption}
+                          className="add-option-btn"
+                        >
+                          + Add Option
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="form-group">
+                    <label>Marks *</label>
+                    <input
+                      type="number"
+                      value={currentQuestion.marks}
+                      onChange={(e) =>
+                        setCurrentQuestion({
+                          ...currentQuestion,
+                          marks: Number(e.target.value),
+                        })
+                      }
+                      min="1"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleAddQuestion}
+                    className="add-question-btn"
+                  >
+                    + Add Question
+                  </button>
+                </div>
+
+                {questions.length > 0 && (
+                  <div className="questions-list">
+                    <h4>Added Questions</h4>
+                    {questions.map((q, index) => (
+                      <div key={index} className="question-card">
+                        <div className="question-header">
+                          <span className="question-number">Q{index + 1}</span>
+                          <span className="question-type">{q.question_type}</span>
+                          <span className="question-marks">{q.marks} marks</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveQuestion(index)}
+                            className="remove-question-btn"
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <div className="question-text">{q.question_text}</div>
+                        {q.options && q.options.length > 0 && (
+                          <div className="question-options">
+                            {q.options.map((opt, i) => (
+                              <div
+                                key={i}
+                                className={`option ${opt.is_correct ? "correct" : ""}`}
+                              >
+                                {opt.option_text} {opt.is_correct && "✓"}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="form-actions">
+                  <button type="button" onClick={() => setCurrentStep(1)}>
+                    Back
+                  </button>
+                  <button type="button" onClick={handleSubmit} className="submit-btn">
+                    {editingAssignment ? "Update" : "Create"} Assignment
+                  </button>
                 </div>
               </div>
-
-              <div className="form-actions">
-                <button type="button" onClick={handleCloseModal}>
-                  Cancel
-                </button>
-                <button type="submit" className="submit-btn">
-                  {editingAssignment ? "Update" : "Create"} Assignment
-                </button>
-              </div>
-            </form>
+            )}
           </div>
         </div>
       )}
