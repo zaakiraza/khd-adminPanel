@@ -64,6 +64,10 @@
   box-shadow: 0 5px 15px rgba(46, 171, 46, 0.4);
 }
 
+.toggle-btn.inactive{
+  background-color: #74df74;
+}
+
 .filter-inputs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

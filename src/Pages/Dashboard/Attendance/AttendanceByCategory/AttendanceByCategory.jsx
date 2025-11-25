@@ -189,13 +189,13 @@ export default function AttendanceByCategory() {
       <div className="filter-card">
         <div className="filter-type-toggle">
           <button
-            className={`toggle-btn ${filterType === "single" ? "active" : ""}`}
+            className={`toggle-btn ${filterType === "single" ? "active" : "inactive"}`}
             onClick={() => setFilterType("single")}
           >
             <i className="fa-solid fa-calendar-day"></i> Single Date
           </button>
           <button
-            className={`toggle-btn ${filterType === "range" ? "active" : ""}`}
+            className={`toggle-btn ${filterType === "range" ? "active" : "inactive"}`}
             onClick={() => setFilterType("range")}
           >
             <i className="fa-solid fa-calendar-week"></i> Date Range

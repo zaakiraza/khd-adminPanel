@@ -1,0 +1,241 @@
+.approve-leave-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.heading {
+    margin-bottom: 30px;
+}
+
+.heading h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.heading .subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.leave-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-card.pending .stat-icon {
+    background-color: #fff7ed;
+    color: #ea580c;
+}
+
+.stat-card.approved .stat-icon {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+
+.stat-card.rejected .stat-icon {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.stat-info p {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.leaves-list {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.list-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+}
+
+.leave-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: background-color 0.2s;
+}
+
+.leave-item:last-child {
+    border-bottom: none;
+}
+
+.leave-item:hover {
+    background-color: #f9fafb;
+}
+
+.applicant-info {
+    display: flex;
+    gap: 15px;
+}
+
+.avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    background-color: #e0e7ff;
+    color: #4f46e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.details h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.leave-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.leave-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reason {
+    color: #555;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.status-tag {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-tag.pending {
+    background-color: #fff7ed;
+    color: #c2410c;
+}
+
+.status-tag.approved {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.status-tag.rejected {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.approve-btn,
+.reject-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.approve-btn {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.approve-btn:hover {
+    background-color: #bbf7d0;
+}
+
+.reject-btn {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.reject-btn:hover {
+    background-color: #fecaca;
+}
+
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6b7280;
+}
+
+.loading-state i,
+.empty-state i {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #d1d5db;
+}

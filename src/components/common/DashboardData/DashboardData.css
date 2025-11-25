@@ -1,46 +1,531 @@
 .dashboard-data {
-	padding: 12px 16px;
+  padding: 2rem;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-header h1 i {
+  color: #667eea;
+  font-size: 1.8rem;
+}
+
+.dashboard-subtitle {
+  color: #7f8c8d;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.loading-container i,
+.error-container i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.loading-container i {
+  color: #667eea;
+}
+
+.error-container i {
+  color: #e74c3c;
+}
+
+.loading-container p,
+.error-container p {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
 }
 
 .dashboard-cards {
-	display: flex;
-	gap: 12px;
-	margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .card {
-	background: #fff;
-	padding: 12px;
-	border-radius: 8px;
-	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
-	min-width: 160px;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.students-card .card-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.classes-card .card-icon {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.exams-card .card-icon {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.leaves-card .card-icon {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: white;
+}
+
+.assignments-card .card-icon {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+.lesson-card .card-icon {
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  color: white;
+}
+
+.total-exams-card .card-icon {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: #2c3e50;
+}
+
+.completed-card .card-icon {
+  background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+  color: #2c3e50;
+}
+
+.card-content {
+  flex: 1;
 }
 
 .card-title {
-	color: #666;
-	font-size: 13px;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .card-value {
-	font-weight: 700;
-	font-size: 24px;
-	margin-top: 6px;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #2c3e50;
+  line-height: 1;
+}
+
+/* Weekly Progress Section */
+.weekly-progress-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.weekly-progress-section h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.weekly-progress-section h2 i {
+  color: #667eea;
+}
+
+.progress-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.progress-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.progress-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.attendance-icon {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.exams-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.assignments-icon {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.lessons-icon {
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+}
+
+.progress-info {
+  flex: 1;
+}
+
+.progress-info h3 {
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.progress-value {
+  color: #667eea;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.attendance-fill {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.exams-fill {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.assignments-fill {
+  background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+}
+
+.lessons-fill {
+  background: linear-gradient(90deg, #30cfd0 0%, #330867 100%);
+}
+
+.progress-description {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Upcoming Exams Section */
+.upcoming-exams-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.upcoming-exams-section h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.upcoming-exams-section h2 i {
+  color: #667eea;
+}
+
+.exams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exam-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+  transition: all 0.2s ease;
+}
+
+.exam-item:hover {
+  background: #ecf0f1;
+  transform: translateX(4px);
+}
+
+.exam-date-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.exam-day {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.exam-month {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.exam-details {
+  flex: 1;
+}
+
+.exam-details h3 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.exam-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.exam-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.exam-meta i {
+  color: #667eea;
+}
+
+.exam-status .status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.exam-status .status-badge.scheduled {
+  background: #e8f4f8;
+  color: #2980b9;
+}
+
+.exam-status .status-badge.ongoing {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.exam-status .status-badge.completed {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-data {
+    padding: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .card-value {
+    font-size: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 0.75rem;
+  }
+
+  .exam-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .exam-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .progress-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .progress-card {
+    padding: 1.25rem;
+  }
+
+  .progress-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+  }
+
+  .progress-value {
+    font-size: 1.5rem;
+  }
+
+  .upcoming-exams-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .card::before {
+    width: 100%;
+    height: 4px;
+  }
 }
 
 .classes_list_title {
-	font-weight: 600;
-	margin-bottom: 8px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .classes_list ul {
-	list-style: disc;
-	padding-left: 20px;
+  list-style: disc;
+  padding-left: 20px;
 }
 
 .classes_list .muted {
-	color: #888;
+  color: #888;
 }
 
 .classes_list .error {
-	color: #b00020;
+  color: #b00020;
 }
