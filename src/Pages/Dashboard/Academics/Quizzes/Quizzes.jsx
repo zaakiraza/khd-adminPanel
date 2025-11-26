@@ -290,9 +290,7 @@ export default function Quizzes() {
     switch (status) {
       case "published":
         return "#28a745";
-      case "ongoing":
-        return "#007bff";
-      case "completed":
+      case "close":
         return "#6c757d";
       case "draft":
         return "#ffc107";
@@ -329,10 +327,6 @@ export default function Quizzes() {
           <h3>{draftQuizzes}</h3>
           <p>Drafts</p>
         </div>
-        <div className="stat-card">
-          <h3>{quizzes.filter(q => q.status === "ongoing").length}</h3>
-          <p>Ongoing</p>
-        </div>
       </div>
 
       {/* Filters */}
@@ -359,8 +353,7 @@ export default function Quizzes() {
             <option value="">All Status</option>
             <option value="draft">Draft</option>
             <option value="published">Published</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
+            <option value="close">Close</option>
           </select>
 
           <button className="filter-btn" onClick={applyFilters}>
@@ -448,9 +441,9 @@ export default function Quizzes() {
                 {quiz.status === "ongoing" && (
                   <button
                     className="action-btn complete-btn"
-                    onClick={() => handleStatusUpdate(quiz._id, "completed")}
+                    onClick={() => handleStatusUpdate(quiz._id, "close")}
                   >
-                    Complete
+                    Close
                   </button>
                 )}
                 <button
