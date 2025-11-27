@@ -34,7 +34,7 @@ export default function ManageStatus() {
   ];
 
   const currentYear = new Date().getFullYear();
-  const yearOptions = [currentYear, currentYear + 1, currentYear + 2];
+  const yearOptions = [currentYear, currentYear - 1, currentYear - 2, currentYear - 3, currentYear - 4];
 
   // Fetch sessions from backend
   const fetchSessions = async () => {
@@ -321,12 +321,12 @@ export default function ManageStatus() {
       <div className="heading">
         <h1>Manage Student Status</h1>
       </div>
-      <div className="status-info">
+      {/* <div className="status-info">
         <p className="info-badge">
           <i className="fa-solid fa-info-circle"></i>
           Showing students with: <strong>Application Accepted</strong>, <strong>Active</strong>, and <strong>Verified</strong>
         </p>
-      </div>
+      </div> */}
 
       {/* Promotion Section */}
       <div className="promotion-section">

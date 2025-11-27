@@ -11,14 +11,24 @@ export default function AttendanceByCategory() {
 
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [filterType, setFilterType] = useState("single"); // single or range
   const [attendanceData, setAttendanceData] = useState(null);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [filteredRecords, setFilteredRecords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [statistics, setStatistics] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState("all"); // all, absent3, leaves, absent1
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailData, setEmailData] = useState({
+    subject: "",
+    message: "",
+  });
 
   // Fetch all active classes
   const fetchClasses = async () => {
@@ -48,7 +58,7 @@ export default function AttendanceByCategory() {
 
     setLoading(true);
     try {
-      const classData = classes.find(cls => cls.class_name === selectedClass);
+      const classData = classes.find((cls) => cls.class_name === selectedClass);
       const response = await axios.get(
         `${baseURL}/attendance/class/date?class_id=${classData._id}&date=${selectedDate}`,
         {
@@ -61,6 +71,7 @@ export default function AttendanceByCategory() {
       if (response.status === 200) {
         setAttendanceData(response.data.data);
         setAttendanceRecords([response.data.data]);
+        setFilteredRecords([response.data.data]);
         calculateStatistics([response.data.data]);
       }
     } catch (e) {
@@ -68,6 +79,7 @@ export default function AttendanceByCategory() {
         showWarning("No attendance record found for this date");
         setAttendanceData(null);
         setAttendanceRecords([]);
+        setFilteredRecords([]);
         setStatistics(null);
       } else {
         showError(e.response?.data?.message || "Failed to fetch attendance");
@@ -91,7 +103,7 @@ export default function AttendanceByCategory() {
 
     setLoading(true);
     try {
-      const classData = classes.find(cls => cls.class_name === selectedClass);
+      const classData = classes.find((cls) => cls.class_name === selectedClass);
       const response = await axios.get(
         `${baseURL}/attendance/class?class_id=${classData._id}&start_date=${startDate}&end_date=${endDate}`,
         {
@@ -104,12 +116,14 @@ export default function AttendanceByCategory() {
       if (response.status === 200) {
         setAttendanceRecords(response.data.data);
         setAttendanceData(null);
+        setFilteredRecords(response.data.data);
         calculateStatistics(response.data.data);
       }
     } catch (e) {
       if (e.response && e.response.status === 404) {
         showWarning("No attendance records found for this date range");
         setAttendanceRecords([]);
+        setFilteredRecords([]);
         setStatistics(null);
       } else {
         showError(e.response?.data?.message || "Failed to fetch attendance");
@@ -139,11 +153,16 @@ export default function AttendanceByCategory() {
 
     stats.avg_present = (stats.total_present / records.length).toFixed(1);
     stats.avg_absent = (stats.total_absent / records.length).toFixed(1);
-    
-    const totalMarked = stats.total_present + stats.total_absent + stats.total_late + stats.total_leave;
-    stats.attendance_percentage = totalMarked > 0 
-      ? ((stats.total_present / totalMarked) * 100).toFixed(1)
-      : 0;
+
+    const totalMarked =
+      stats.total_present +
+      stats.total_absent +
+      stats.total_late +
+      stats.total_leave;
+    stats.attendance_percentage =
+      totalMarked > 0
+        ? ((stats.total_present / totalMarked) * 100).toFixed(1)
+        : 0;
 
     setStatistics(stats);
   };
@@ -158,12 +177,267 @@ export default function AttendanceByCategory() {
 
   const handleReset = () => {
     setSelectedClass("");
-    setSelectedDate(new Date().toISOString().split('T')[0]);
+    setSelectedDate(new Date().toISOString().split("T")[0]);
     setStartDate("");
     setEndDate("");
     setAttendanceData(null);
     setAttendanceRecords([]);
+    setFilteredRecords([]);
     setStatistics(null);
+    setSelectedFilter("all");
+  };
+
+  // Apply student filter based on selected criteria
+  const applyStudentFilter = (filterType) => {
+    setSelectedFilter(filterType);
+
+    if (filterType === "all") {
+      setFilteredRecords(attendanceRecords);
+      calculateStatistics(attendanceRecords);
+      return;
+    }
+
+    const filtered = attendanceRecords.map((record) => {
+      let filteredStudents = [];
+
+      if (filterType === "absent1") {
+        // Students who were absent in this specific class
+        filteredStudents = record.attendance_records.filter(
+          (student) => student.status === "absent"
+        );
+      } else if (filterType === "leaves") {
+        // Students who were on leave
+        filteredStudents = record.attendance_records.filter(
+          (student) => student.status === "leave"
+        );
+      } else if (filterType === "absent3") {
+        // Students who were absent in last 3 consecutive classes
+        // This requires checking across multiple records
+        const studentAbsenceCount = {};
+
+        // Count absences for each student across all records (sorted by date)
+        const sortedRecords = [...attendanceRecords].sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+
+        sortedRecords.forEach((rec) => {
+          rec.attendance_records.forEach((student) => {
+            if (!studentAbsenceCount[student.student_id]) {
+              studentAbsenceCount[student.student_id] = {
+                name: student.student_name,
+                roll_no: student.roll_no,
+                absences: [],
+              };
+            }
+            studentAbsenceCount[student.student_id].absences.push({
+              date: rec.date,
+              status: student.status,
+            });
+          });
+        });
+
+        // Find students with 3 consecutive absences
+        const studentsWithThreeAbsences = Object.keys(
+          studentAbsenceCount
+        ).filter((studentId) => {
+          const absences = studentAbsenceCount[studentId].absences;
+          let consecutiveAbsent = 0;
+
+          for (let i = 0; i < absences.length; i++) {
+            if (absences[i].status === "absent") {
+              consecutiveAbsent++;
+              if (consecutiveAbsent >= 3) {
+                return true;
+              }
+            } else {
+              consecutiveAbsent = 0;
+            }
+          }
+          return false;
+        });
+
+        // Filter students from current record who have 3 consecutive absences
+        filteredStudents = record.attendance_records.filter((student) =>
+          studentsWithThreeAbsences.includes(student.student_id)
+        );
+      }
+
+      return {
+        ...record,
+        attendance_records: filteredStudents,
+        total_present: filteredStudents.filter((s) => s.status === "present")
+          .length,
+        total_absent: filteredStudents.filter((s) => s.status === "absent")
+          .length,
+        total_late: filteredStudents.filter((s) => s.status === "late").length,
+        total_leave: filteredStudents.filter((s) => s.status === "leave")
+          .length,
+      };
+    });
+
+    setFilteredRecords(filtered);
+    calculateStatistics(filtered);
+  };
+
+  // Get unique students from filtered records
+  const getFilteredStudents = () => {
+    const studentMap = new Map();
+
+    filteredRecords.forEach((record) => {
+      record.attendance_records.forEach((student) => {
+        if (!studentMap.has(student.student_id)) {
+          studentMap.set(student.student_id, {
+            student_id: student.student_id,
+            student_name: student.student_name,
+            roll_no: student.roll_no,
+          });
+        }
+      });
+    });
+
+    return Array.from(studentMap.values());
+  };
+
+  // Open email modal with pre-filled data
+  const handleOpenEmailModal = () => {
+    const students = getFilteredStudents();
+
+    if (students.length === 0) {
+      showWarning("No students to send email to");
+      return;
+    }
+
+    // Pre-fill email data based on filter type
+    let subject = "";
+    let message = "";
+
+    switch (selectedFilter) {
+      case "absent1":
+        subject = "Attendance Notice - Absence Recorded";
+        message = `Dear Student/Guardian,\n\nThis is to inform you that attendance records show absence(s) for the selected class period(s).\n\nClass: ${selectedClass}\nDate Range: ${
+          filterType === "single" ? selectedDate : `${startDate} to ${endDate}`
+        }\n\nPlease contact the administration if you have any questions.\n\nBest Regards,\nKhuddam Learning Management`;
+        break;
+
+      case "leaves":
+        subject = "Leave Record Notification";
+        message = `Dear Student/Guardian,\n\nThis is a notification regarding leave record(s) for the selected period.\n\nClass: ${selectedClass}\nDate Range: ${
+          filterType === "single" ? selectedDate : `${startDate} to ${endDate}`
+        }\n\nIf you have any questions, please contact the administration.\n\nBest Regards,\nKhuddam Learning Management`;
+        break;
+
+      case "absent3":
+        subject = "URGENT: Multiple Absences Recorded";
+        message = `Dear Student/Guardian,\n\nThis is an URGENT notice regarding multiple consecutive absences recorded in our system.\n\nClass: ${selectedClass}\nDate Range: ${
+          filterType === "single" ? selectedDate : `${startDate} to ${endDate}`
+        }\n\nMultiple absences may affect academic progress. Please contact the administration immediately to discuss this matter.\n\nBest Regards,\nKhuddam Learning Management`;
+        break;
+
+      default:
+        subject = "Attendance Update";
+        message = `Dear Student/Guardian,\n\nThis is a notification regarding attendance records.\n\nClass: ${selectedClass}\nDate Range: ${
+          filterType === "single" ? selectedDate : `${startDate} to ${endDate}`
+        }\n\nPlease review your attendance records and contact us if you have any questions.\n\nBest Regards,\nKhuddam Learning Management`;
+    }
+
+    setEmailData({ subject, message });
+    setShowEmailModal(true);
+  };
+
+  // Send email to filtered students
+  const handleSendEmail = async () => {
+    if (!emailData.subject.trim() || !emailData.message.trim()) {
+      showWarning("Please fill in both subject and message");
+      return;
+    }
+
+    const students = getFilteredStudents();
+    const studentIds = students.map((s) => s.student_id);
+
+    setSendingEmail(true);
+    setShowEmailModal(false);
+
+    try {
+      let successCount = 0;
+      let failedCount = 0;
+
+      // Send emails individually to each student
+      for (const studentId of studentIds) {
+        try {
+          // Get student email
+          const studentResponse = await axios.get(
+            `${baseURL}/users/single/${studentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+
+          const studentEmail = studentResponse.data.data?.personal_info?.email;
+
+          if (studentEmail) {
+            // Create and send message
+            const messagePayload = {
+              type: "email",
+              recipients: {
+                all: false,
+                custom_emails: [studentEmail],
+                filters: {},
+              },
+              subject: emailData.subject,
+              message: emailData.message,
+            };
+
+            const createResponse = await axios.post(
+              `${baseURL}/message`,
+              messagePayload,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+
+            if (createResponse.status === 201) {
+              const messageId = createResponse.data.data._id;
+
+              // Send the message
+              await axios.post(
+                `${baseURL}/message/${messageId}/send`,
+                {},
+                {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                }
+              );
+              successCount++;
+            }
+          } else {
+            failedCount++;
+          }
+        } catch (error) {
+          console.error(`Failed to send email to student ${studentId}:`, error);
+          failedCount++;
+        }
+      }
+
+      if (successCount > 0) {
+        showSuccess(
+          `Email sent successfully to ${successCount} student${
+            successCount !== 1 ? "s" : ""
+          }${failedCount > 0 ? `. Failed: ${failedCount}` : ""}`
+        );
+      } else {
+        showError("Failed to send emails to students");
+      }
+    } catch (e) {
+      showError(e.response?.data?.message || "Failed to send email");
+      console.error("Email sending error:", e);
+    } finally {
+      setSendingEmail(false);
+    }
   };
 
   useEffect(() => {
@@ -171,10 +445,10 @@ export default function AttendanceByCategory() {
   }, []);
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -182,20 +456,26 @@ export default function AttendanceByCategory() {
     <section className="attendance-category-container">
       <div className="heading">
         <h1>Attendance By Category</h1>
-        <p className="subtitle">View attendance records with advanced filters</p>
+        <p className="subtitle">
+          View attendance records with advanced filters
+        </p>
       </div>
 
       {/* Filter Section */}
       <div className="filter-card">
         <div className="filter-type-toggle">
           <button
-            className={`toggle-btn ${filterType === "single" ? "active" : "inactive"}`}
+            className={`toggle-btn ${
+              filterType === "single" ? "active" : "inactive"
+            }`}
             onClick={() => setFilterType("single")}
           >
             <i className="fa-solid fa-calendar-day"></i> Single Date
           </button>
           <button
-            className={`toggle-btn ${filterType === "range" ? "active" : "inactive"}`}
+            className={`toggle-btn ${
+              filterType === "range" ? "active" : "inactive"
+            }`}
             onClick={() => setFilterType("range")}
           >
             <i className="fa-solid fa-calendar-week"></i> Date Range
@@ -233,7 +513,7 @@ export default function AttendanceByCategory() {
                 id="date-select"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                max={new Date().toISOString().split('T')[0]}
+                max={new Date().toISOString().split("T")[0]}
               />
             </div>
           ) : (
@@ -247,7 +527,7 @@ export default function AttendanceByCategory() {
                   id="start-date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  max={new Date().toISOString().split('T')[0]}
+                  max={new Date().toISOString().split("T")[0]}
                 />
               </div>
               <div className="filter-group">
@@ -259,7 +539,7 @@ export default function AttendanceByCategory() {
                   id="end-date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  max={new Date().toISOString().split('T')[0]}
+                  max={new Date().toISOString().split("T")[0]}
                 />
               </div>
             </>
@@ -335,9 +615,76 @@ export default function AttendanceByCategory() {
               <i className="fa-solid fa-percent"></i>
               <div>
                 <span className="stat-label">Attendance Rate</span>
-                <span className="stat-value">{statistics.attendance_percentage}%</span>
+                <span className="stat-value">
+                  {statistics.attendance_percentage}%
+                </span>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Student Filter Section */}
+      {attendanceRecords.length > 0 && (
+        <div className="student-filter-card">
+          <div className="filter-header">
+            <h3>
+              <i className="fa-solid fa-filter"></i> Filter Students
+            </h3>
+            {selectedFilter !== "all" && filteredRecords.length > 0 && (
+              <button
+                className="email-btn"
+                onClick={handleOpenEmailModal}
+                disabled={sendingEmail}
+              >
+                {sendingEmail ? (
+                  <>
+                    <i className="fa-solid fa-spinner fa-spin"></i> Sending...
+                  </>
+                ) : (
+                  <>
+                    <i className="fa-solid fa-envelope"></i> Email{" "}
+                    {getFilteredStudents().length} Student
+                    {getFilteredStudents().length !== 1 ? "s" : ""}
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+          <div className="filter-buttons">
+            <button
+              className={`filter-badge ${
+                selectedFilter === "all" ? "active" : ""
+              }`}
+              onClick={() => applyStudentFilter("all")}
+            >
+              <i className="fa-solid fa-users"></i> All Students
+            </button>
+            <button
+              className={`filter-badge ${
+                selectedFilter === "absent1" ? "active" : ""
+              }`}
+              onClick={() => applyStudentFilter("absent1")}
+            >
+              <i className="fa-solid fa-times-circle"></i> Absent in Class
+            </button>
+            <button
+              className={`filter-badge ${
+                selectedFilter === "leaves" ? "active" : ""
+              }`}
+              onClick={() => applyStudentFilter("leaves")}
+            >
+              <i className="fa-solid fa-umbrella"></i> On Leave
+            </button>
+            <button
+              className={`filter-badge ${
+                selectedFilter === "absent3" ? "active" : ""
+              }`}
+              onClick={() => applyStudentFilter("absent3")}
+            >
+              <i className="fa-solid fa-exclamation-triangle"></i> Absent 3+
+              Times
+            </button>
           </div>
         </div>
       )}
@@ -348,19 +695,23 @@ export default function AttendanceByCategory() {
           <i className="fa-solid fa-spinner fa-spin"></i>
           <p>Loading attendance data...</p>
         </div>
-      ) : attendanceRecords.length > 0 ? (
+      ) : filteredRecords.length > 0 ? (
         <div className="results-section">
           <h3>
             <i className="fa-solid fa-clipboard-list"></i> Attendance Records
-            <span className="record-count">({attendanceRecords.length} {attendanceRecords.length === 1 ? 'record' : 'records'})</span>
+            <span className="record-count">
+              ({filteredRecords.length}{" "}
+              {filteredRecords.length === 1 ? "record" : "records"})
+            </span>
           </h3>
 
-          {attendanceRecords.map((record, index) => (
+          {filteredRecords.map((record, index) => (
             <div key={record._id} className="attendance-record-card">
               <div className="record-header">
                 <div className="record-info">
                   <h4>
-                    <i className="fa-solid fa-calendar-day"></i> {formatDate(record.date)}
+                    <i className="fa-solid fa-calendar-day"></i>{" "}
+                    {formatDate(record.date)}
                   </h4>
                   <span className="class-badge">{record.class_name}</span>
                 </div>
@@ -375,7 +726,8 @@ export default function AttendanceByCategory() {
                     <i className="fa-solid fa-clock"></i> {record.total_late}
                   </span>
                   <span className="summary-item leave">
-                    <i className="fa-solid fa-umbrella"></i> {record.total_leave}
+                    <i className="fa-solid fa-umbrella"></i>{" "}
+                    {record.total_leave}
                   </span>
                 </div>
               </div>
@@ -397,14 +749,25 @@ export default function AttendanceByCategory() {
                         <td>{student.student_name}</td>
                         <td>
                           <span className={`status-badge ${student.status}`}>
-                            {student.status === "present" && <i className="fa-solid fa-check"></i>}
-                            {student.status === "absent" && <i className="fa-solid fa-times"></i>}
-                            {student.status === "late" && <i className="fa-solid fa-clock"></i>}
-                            {student.status === "leave" && <i className="fa-solid fa-umbrella"></i>}
-                            {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+                            {student.status === "present" && (
+                              <i className="fa-solid fa-check"></i>
+                            )}
+                            {student.status === "absent" && (
+                              <i className="fa-solid fa-times"></i>
+                            )}
+                            {student.status === "late" && (
+                              <i className="fa-solid fa-clock"></i>
+                            )}
+                            {student.status === "leave" && (
+                              <i className="fa-solid fa-umbrella"></i>
+                            )}
+                            {student.status.charAt(0).toUpperCase() +
+                              student.status.slice(1)}
                           </span>
                         </td>
-                        <td>{new Date(student.marked_at).toLocaleTimeString()}</td>
+                        <td>
+                          {new Date(student.marked_at).toLocaleTimeString()}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -418,6 +781,85 @@ export default function AttendanceByCategory() {
           <i className="fa-solid fa-inbox"></i>
           <p>No attendance records found</p>
           <span>Use filters above to search for attendance data</span>
+        </div>
+      )}
+
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div className="modal-overlay" onClick={() => setShowEmailModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>
+                <i className="fa-solid fa-envelope"></i> Compose Email
+              </h2>
+              <button
+                className="modal-close-btn"
+                onClick={() => setShowEmailModal(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="recipient-info">
+                <i className="fa-solid fa-users"></i>
+                <span>
+                  Sending to {getFilteredStudents().length} student
+                  {getFilteredStudents().length !== 1 ? "s" : ""}:{" "}
+                  {getFilteredStudents()
+                    .slice(0, 3)
+                    .map((s) => s.student_name)
+                    .join(", ")}
+                  {getFilteredStudents().length > 3 &&
+                    ` and ${getFilteredStudents().length - 3} more`}
+                </span>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email-subject">
+                  <i className="fa-solid fa-heading"></i> Subject *
+                </label>
+                <input
+                  type="text"
+                  id="email-subject"
+                  className="form-input"
+                  value={emailData.subject}
+                  onChange={(e) =>
+                    setEmailData({ ...emailData, subject: e.target.value })
+                  }
+                  placeholder="Enter email subject"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email-message">
+                  <i className="fa-solid fa-message"></i> Message *
+                </label>
+                <textarea
+                  id="email-message"
+                  className="form-textarea"
+                  rows="10"
+                  value={emailData.message}
+                  onChange={(e) =>
+                    setEmailData({ ...emailData, message: e.target.value })
+                  }
+                  placeholder="Enter email message"
+                />
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowEmailModal(false)}
+              >
+                <i className="fa-solid fa-times"></i> Cancel
+              </button>
+              <button className="send-btn" onClick={handleSendEmail}>
+                <i className="fa-solid fa-paper-plane"></i> Send Email
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </section>
