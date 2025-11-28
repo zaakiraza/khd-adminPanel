@@ -21,7 +21,7 @@ const menuConfig = [
   {
     key: "examinations",
     label: "Examinations",
-    items: ["Exam Schedule", "Results", "Create Exam"],
+    items: ["Exam Schedule", "Results"],
   },
   {
     key: "lessonplan",
@@ -193,7 +193,6 @@ function buildPath(sectionLabel, itemLabel) {
     "Approve Leave": "approve-leave",
     "Exam Schedule": "exam-schedule",
     Results: "results",
-    "Create Exam": "create-exam",
     "Manage Lesson Plans": "manage-lesson-plans",
     TimeTable: "timetable",
     Sessions: "sessions",

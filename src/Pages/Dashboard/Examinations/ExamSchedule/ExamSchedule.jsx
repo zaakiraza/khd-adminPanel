@@ -11,6 +11,9 @@ export default function ExamSchedule() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingExam, setEditingExam] = useState(null);
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
+  const [selectedExam, setSelectedExam] = useState(null);
+  const [questions, setQuestions] = useState([]);
   const [filters, setFilters] = useState({
     class_id: "",
     status: "",
@@ -29,6 +32,20 @@ export default function ExamSchedule() {
     passing_marks: "40",
     exam_type: "final",
   });
+
+  useEffect(() => {
+    // Auto-calculate duration when start_time and end_time change
+    if (formData.start_time && formData.end_time) {
+      const start = new Date(`1970-01-01T${formData.start_time}:00`);
+      const end = new Date(`1970-01-01T${formData.end_time}:00`);
+      const diffMs = end - start;
+      const diffMins = Math.floor(diffMs / 60000);
+      
+      if (diffMins > 0) {
+        setFormData(prev => ({ ...prev, duration: diffMins.toString() }));
+      }
+    }
+  }, [formData.start_time, formData.end_time]);
 
   useEffect(() => {
     fetchClasses();
@@ -123,6 +140,69 @@ export default function ExamSchedule() {
     setShowModal(true);
   };
 
+  const handleManageQuestions = (exam) => {
+    setSelectedExam(exam);
+    setQuestions(exam.questions || []);
+    setShowQuestionsModal(true);
+  };
+
+  const handleAddQuestion = () => {
+    const newQuestion = {
+      id: Date.now(),
+      question_text: "",
+      question_type: "mcq",
+      options: ["", "", "", ""],
+      correct_answer: "",
+      marks: 1,
+    };
+    setQuestions([...questions, newQuestion]);
+  };
+
+  const handleUpdateQuestion = (index, field, value) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index][field] = value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleUpdateOption = (qIndex, optIndex, value) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].options[optIndex] = value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleDeleteQuestion = (index) => {
+    setQuestions(questions.filter((_, i) => i !== index));
+  };
+
+  const handleSaveQuestions = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Calculate total marks from questions
+      const calculatedTotalMarks = questions.reduce((sum, q) => sum + parseFloat(q.marks || 0), 0);
+      
+      // Calculate passing marks as half of total marks
+      const calculatedPassingMarks = Math.floor(calculatedTotalMarks / 2);
+      
+      await axios.put(
+        `${baseURL}/exam-schedule/${selectedExam._id}`,
+        { 
+          questions,
+          total_marks: calculatedTotalMarks,
+          passing_marks: calculatedPassingMarks
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      showSuccess(`Questions saved successfully. Total marks: ${calculatedTotalMarks}, Passing marks: ${calculatedPassingMarks}`);
+      setShowQuestionsModal(false);
+      fetchExams();
+    } catch (error) {
+      showError("Failed to save questions");
+    }
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this exam schedule?"))
       return;
@@ -167,8 +247,8 @@ export default function ExamSchedule() {
       start_time: "",
       end_time: "",
       duration: "",
-      total_marks: "100",
-      passing_marks: "40",
+      total_marks: "",
+      passing_marks: "",
       exam_type: "final",
     });
   };
@@ -404,9 +484,25 @@ export default function ExamSchedule() {
                     {exam.total_marks} (Pass: {exam.passing_marks})
                   </span>
                 </div>
+
+                <div className="detail-row">
+                  <i className="fas fa-question-circle"></i>
+                  <span className="label">Questions:</span>
+                  <span className="value">
+                    {exam.questions?.length || 0} questions
+                  </span>
+                </div>
               </div>
 
               <div className="card-actions">
+                <button
+                  className="action-btn questions-btn"
+                  onClick={() => handleManageQuestions(exam)}
+                  title="Manage exam questions"
+                >
+                  <i className="fas fa-question-circle"></i> Questions
+                </button>
+
                 <button
                   className="action-btn edit-btn"
                   onClick={() => handleEdit(exam)}
@@ -449,6 +545,150 @@ export default function ExamSchedule() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Questions Modal */}
+      {showQuestionsModal && (
+        <div className="modal-overlay" onClick={() => setShowQuestionsModal(false)}>
+          <div className="modal-content questions-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>
+                <i className="fas fa-question-circle"></i>
+                Manage Questions - {selectedExam?.exam_name}
+              </h2>
+              <button className="close-btn" onClick={() => setShowQuestionsModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+
+            <div className="questions-container">
+              {questions.length === 0 ? (
+                <div className="empty-state">
+                  <i className="fas fa-clipboard-list"></i>
+                  <p>No questions added yet</p>
+                  <span>Click "Add Question" to create your first question</span>
+                </div>
+              ) : (
+                questions.map((q, qIndex) => (
+                  <div key={q.id} className="question-card">
+                    <div className="question-header">
+                      <span className="question-number">Question {qIndex + 1}</span>
+                      <button
+                        className="delete-question-btn"
+                        onClick={() => handleDeleteQuestion(qIndex)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Question Text</label>
+                      <textarea
+                        value={q.question_text}
+                        onChange={(e) =>
+                          handleUpdateQuestion(qIndex, "question_text", e.target.value)
+                        }
+                        placeholder="Enter your question here..."
+                        rows="3"
+                      />
+                    </div>
+
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Question Type</label>
+                        <select
+                          value={q.question_type}
+                          onChange={(e) =>
+                            handleUpdateQuestion(qIndex, "question_type", e.target.value)
+                          }
+                        >
+                          <option value="mcq">Multiple Choice</option>
+                          <option value="true_false">True/False</option>
+                          <option value="short_answer">Short Answer</option>
+                          <option value="essay">Essay</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Marks</label>
+                        <input
+                          type="number"
+                          value={q.marks}
+                          onChange={(e) =>
+                            handleUpdateQuestion(qIndex, "marks", e.target.value)
+                          }
+                          min="1"
+                        />
+                      </div>
+                    </div>
+
+                    {q.question_type === "mcq" && (
+                      <div className="options-section">
+                        <label>Options</label>
+                        {q.options.map((opt, optIndex) => (
+                          <div key={optIndex} className="option-input">
+                            <span className="option-label">
+                              {String.fromCharCode(65 + optIndex)}.
+                            </span>
+                            <input
+                              type="text"
+                              value={opt}
+                              onChange={(e) =>
+                                handleUpdateOption(qIndex, optIndex, e.target.value)
+                              }
+                              placeholder={`Option ${String.fromCharCode(65 + optIndex)}`}
+                            />
+                          </div>
+                        ))}
+                        <div className="form-group">
+                          <label>Correct Answer</label>
+                          <select
+                            value={q.correct_answer}
+                            onChange={(e) =>
+                              handleUpdateQuestion(qIndex, "correct_answer", e.target.value)
+                            }
+                          >
+                            <option value="">Select correct option</option>
+                            {q.options.map((_, i) => (
+                              <option key={i} value={String.fromCharCode(65 + i)}>
+                                Option {String.fromCharCode(65 + i)}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+
+                    {q.question_type === "true_false" && (
+                      <div className="form-group">
+                        <label>Correct Answer</label>
+                        <select
+                          value={q.correct_answer}
+                          onChange={(e) =>
+                            handleUpdateQuestion(qIndex, "correct_answer", e.target.value)
+                          }
+                        >
+                          <option value="">Select answer</option>
+                          <option value="true">True</option>
+                          <option value="false">False</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button className="add-question-btn" onClick={handleAddQuestion}>
+                <i className="fas fa-plus"></i> Add Question
+              </button>
+              <button className="save-questions-btn" onClick={handleSaveQuestions}>
+                <i className="fas fa-save"></i> Save Questions
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -559,17 +799,16 @@ export default function ExamSchedule() {
                 <div className="form-group">
                   <label>
                     <i className="fas fa-hourglass-half"></i> Duration (mins){" "}
-                    <span className="required">*</span>
+                    <span style={{ color: "#666", fontWeight: "normal", fontSize: "0.85rem" }}>
+                      (Auto-calculated)
+                    </span>
                   </label>
                   <input
                     type="number"
                     value={formData.duration}
-                    onChange={(e) =>
-                      setFormData({ ...formData, duration: e.target.value })
-                    }
-                    required
-                    min="1"
-                    placeholder="e.g., 90"
+                    readOnly
+                    style={{ background: "#f1f5f9", cursor: "not-allowed" }}
+                    placeholder="Set start & end time"
                   />
                 </div>
               </div>
@@ -610,35 +849,32 @@ export default function ExamSchedule() {
                 <div className="form-group">
                   <label>
                     <i className="fas fa-trophy"></i> Total Marks{" "}
-                    <span className="required">*</span>
+                    <span style={{ color: "#666", fontWeight: "normal", fontSize: "0.85rem" }}>
+                      (Auto-calculated from questions)
+                    </span>
                   </label>
                   <input
                     type="number"
                     value={formData.total_marks}
-                    onChange={(e) =>
-                      setFormData({ ...formData, total_marks: e.target.value })
-                    }
-                    required
-                    min="1"
+                    readOnly
+                    style={{ background: "#f1f5f9", cursor: "not-allowed" }}
+                    placeholder="Add questions to calculate"
                   />
                 </div>
 
                 <div className="form-group">
                   <label>
                     <i className="fas fa-check"></i> Passing Marks{" "}
-                    <span className="required">*</span>
+                    <span style={{ color: "#666", fontWeight: "normal", fontSize: "0.85rem" }}>
+                      (50% of total marks)
+                    </span>
                   </label>
                   <input
                     type="number"
                     value={formData.passing_marks}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        passing_marks: e.target.value,
-                      })
-                    }
-                    required
-                    min="1"
+                    readOnly
+                    style={{ background: "#f1f5f9", cursor: "not-allowed" }}
+                    placeholder="Auto-calculated"
                   />
                 </div>
               </div>

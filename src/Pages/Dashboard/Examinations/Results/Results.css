@@ -115,6 +115,23 @@
     background-color: #15803d;
 }
 
+.unpublish-btn {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.unpublish-btn:hover {
+    background-color: #b91c1c;
+}
+
 .results-table {
     width: 100%;
     border-collapse: collapse;

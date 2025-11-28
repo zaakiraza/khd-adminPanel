@@ -19,7 +19,6 @@ import {
   ApproveLeave,
   ExamSchedule,
   Results,
-  CreateExam,
   ManageLessonPlans,
   TimeTable,
   Sessions,
@@ -103,7 +102,6 @@ function App() {
               element={<ExamSchedule />}
             />
             <Route path="examinations/results" element={<Results />} />
-            <Route path="examinations/create-exam" element={<CreateExam />} />
 
             {/* Lesson Plan */}
             <Route

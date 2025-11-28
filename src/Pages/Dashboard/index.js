@@ -12,7 +12,6 @@ export { default as ApproveLeave } from "./Attendance/ApproveLeave/ApproveLeave"
 
 export { default as ExamSchedule } from "./Examinations/ExamSchedule/ExamSchedule";
 export { default as Results } from "./Examinations/Results/Results";
-export { default as CreateExam } from "./Examinations/CreateExam/CreateExam";
 
 export { default as ManageLessonPlans } from "./LessonPlan/ManageLessonPlans/ManageLessonPlans";
 
