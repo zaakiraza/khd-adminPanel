@@ -22,9 +22,7 @@ export { default as Schedule } from "./Academics/Schedule/Schedule";
 export { default as Assignments } from "./Academics/Assignments/Assignments";
 export { default as Quizzes } from "./Academics/Quizzes/Quizzes";
 
-export { default as SendMessage } from "./Communications/SendMessage/SendMessage";
 export { default as EmailMatter } from "./Communications/EmailMatter/EmailMatter";
-export { default as SendMail } from "./Communications/SendMail/SendMail";
 
 export { default as ScheduleMeeting } from "./Zoom/ScheduleMeeting/ScheduleMeeting";
 export { default as MeetingCategories } from "./Zoom/MeetingCategories/MeetingCategories";

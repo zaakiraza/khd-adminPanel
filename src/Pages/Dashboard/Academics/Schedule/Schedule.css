@@ -48,7 +48,7 @@
 .toggle-btn {
   padding: 0.7rem 1.5rem;
   border: none;
-  background: transparent;
+  background: #66cb66;
   color: #64748b;
   border-radius: 8px;
   font-weight: 600;
@@ -186,8 +186,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.fa-pen{
-    color: white;
+.fa-pen {
+  color: white;
 }
 
 .edit-icon-btn:hover {

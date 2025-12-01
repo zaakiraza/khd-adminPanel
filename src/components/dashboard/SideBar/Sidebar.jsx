@@ -36,7 +36,8 @@ const menuConfig = [
   {
     key: "communications",
     label: "Communications",
-    items: ["Send Message", "Email Matter", "Send Mail"],
+    // items: ["Send Message", "Email Matter", "Send Mail"],
+    items: ["Email Matter"],
   },
   {
     key: "zoom",

@@ -26,9 +26,7 @@ import {
   Schedule,
   Assignments,
   Quizzes,
-  SendMessage,
   EmailMatter,
-  SendMail,
   ScheduleMeeting,
   MeetingCategories,
   StudentReport,
@@ -118,15 +116,11 @@ function App() {
             <Route path="academics/quizzes" element={<Quizzes />} />
 
             {/* Communications */}
-            <Route
-              path="communications/send-message"
-              element={<SendMessage />}
-            />
+            
             <Route
               path="communications/email-matter"
               element={<EmailMatter />}
             />
-            <Route path="communications/send-mail" element={<SendMail />} />
 
             {/* Zoom */}
             <Route path="zoom/schedule-meeting" element={<ScheduleMeeting />} />
