@@ -5,11 +5,14 @@ import {useToast} from "../../../../components/common/Toast/ToastContext";
 
 export default function ManageLessonPlans() {
   const baseURL = import.meta.env.VITE_BASEURL;
+  const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+  const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const { showSuccess, showError } = useToast();
 
   const [lessonPlans, setLessonPlans] = useState([]);
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
 
@@ -25,7 +28,8 @@ export default function ManageLessonPlans() {
     subject: "",
     week_number: "",
     year: new Date().getFullYear(),
-    content: "",
+    file_url: "",
+    file_name: "",
     status: "draft",
   });
 
@@ -61,6 +65,60 @@ export default function ManageLessonPlans() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
+    if (!allowedTypes.includes(file.type)) {
+      showError("Please upload only PDF or PowerPoint files");
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      showError("File size must be less than 10MB");
+      return;
+    }
+
+    try {
+      setUploading(true);
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      formDataUpload.append('upload_preset', cloudinaryCloudName);
+      formDataUpload.append('folder', 'khd/lesson-plans');
+
+      // Use raw/upload endpoint for documents (PDF, PPT, PPTX)
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudinaryUploadPreset}/raw/upload`,
+        formDataUpload
+      );
+
+      setFormData({
+        ...formData,
+        file_url: response.data.secure_url,
+        file_name: file.name
+      });
+
+      showSuccess("File uploaded successfully");
+    } catch (error) {
+      console.error("Upload error:", error.response?.data || error);
+      showError(error.response?.data?.error?.message || "Failed to upload file");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFormData({
+      ...formData,
+      file_url: "",
+      file_name: ""
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -107,7 +165,8 @@ export default function ManageLessonPlans() {
       subject: plan.subject,
       week_number: plan.week_number,
       year: plan.year,
-      content: plan.content,
+      file_url: plan.file_url || "",
+      file_name: plan.file_name || "",
       status: plan.status,
     });
     setShowModal(true);
@@ -123,7 +182,8 @@ export default function ManageLessonPlans() {
       subject: "",
       week_number: "",
       year: new Date().getFullYear(),
-      content: "",
+      file_url: "",
+      file_name: "",
       status: "draft",
     });
   };
@@ -199,6 +259,14 @@ export default function ManageLessonPlans() {
                   <i className="fas fa-calendar-week"></i>
                   <span>Week {plan.week_number}, {plan.year}</span>
                 </div>
+                {plan.file_url && (
+                  <div className="info-row">
+                    <i className="fas fa-file-pdf"></i>
+                    <a href={plan.file_url} target="_blank" rel="noopener noreferrer" className="file-link">
+                      {plan.file_name || "View File"}
+                    </a>
+                  </div>
+                )}
                 <p className="description-preview">{plan.description}</p>
               </div>
               <div className="card-actions">
@@ -282,14 +350,46 @@ export default function ManageLessonPlans() {
                 </div>
 
                 <div className="form-group">
-                  <label>Content (Details) *</label>
-                  <textarea
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    required
-                    style={{ minHeight: "200px" }}
-                    placeholder="Detailed lesson content..."
-                  />
+                  <label>Upload Lesson File (PDF or PPT) *</label>
+                  <div className="file-upload-container">
+                    {formData.file_url ? (
+                      <div className="uploaded-file">
+                        <div className="file-info">
+                          <i className="fas fa-file-pdf"></i>
+                          <span>{formData.file_name}</span>
+                          <a href={formData.file_url} target="_blank" rel="noopener noreferrer" className="view-link">
+                            <i className="fas fa-external-link-alt"></i> View
+                          </a>
+                        </div>
+                        <button type="button" className="remove-file-btn" onClick={handleRemoveFile}>
+                          <i className="fas fa-times"></i> Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="file-upload-input">
+                        <input
+                          type="file"
+                          id="lessonFile"
+                          accept=".pdf,.ppt,.pptx"
+                          onChange={handleFileUpload}
+                          disabled={uploading}
+                          required={!editingPlan}
+                        />
+                        <label htmlFor="lessonFile" className="file-upload-label">
+                          {uploading ? (
+                            <>
+                              <i className="fas fa-spinner fa-spin"></i> Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <i className="fas fa-cloud-upload-alt"></i> Choose File (PDF or PPT)
+                            </>
+                          )}
+                        </label>
+                        <p className="file-hint">Maximum file size: 10MB</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="form-group">

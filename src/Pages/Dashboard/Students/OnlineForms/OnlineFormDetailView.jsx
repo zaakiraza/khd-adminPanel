@@ -338,7 +338,7 @@ export default function OnlineFormDetailView() {
                   id="image-upload"
                   type="file"
                   accept="image/*"
-                  onChange={(e) => uploadImage(e.target.files[0], "User Pics")}
+                  onChange={(e) => uploadImage(e.target.files[0], "khd/User Pics")}
                   disabled={uploadingImage}
                   style={{ display: "none" }}
                 />
