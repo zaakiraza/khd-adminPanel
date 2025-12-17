@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { ToastProvider } from "./components/common/Toast/ToastContext.jsx";
 import { setupAxiosInterceptor } from "./utils/axiosInterceptor";
+import "./styles/global.css";
 
 setupAxiosInterceptor();
 

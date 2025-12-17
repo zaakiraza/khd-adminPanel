@@ -40,7 +40,7 @@ export default function ExamSchedule() {
       const end = new Date(`1970-01-01T${formData.end_time}:00`);
       const diffMs = end - start;
       const diffMins = Math.floor(diffMs / 60000);
-      
+
       if (diffMins > 0) {
         setFormData(prev => ({ ...prev, duration: diffMins.toString() }));
       }
@@ -177,16 +177,16 @@ export default function ExamSchedule() {
   const handleSaveQuestions = async () => {
     try {
       const token = localStorage.getItem("token");
-      
+
       // Calculate total marks from questions
       const calculatedTotalMarks = questions.reduce((sum, q) => sum + parseFloat(q.marks || 0), 0);
-      
+
       // Calculate passing marks as half of total marks
       const calculatedPassingMarks = Math.floor(calculatedTotalMarks / 2);
-      
+
       await axios.put(
         `${baseURL}/exam-schedule/${selectedExam._id}`,
-        { 
+        {
           questions,
           total_marks: calculatedTotalMarks,
           passing_marks: calculatedPassingMarks
@@ -325,28 +325,28 @@ export default function ExamSchedule() {
         <div className="summary-card">
           <div className="stat-box total">
             <i className="fas fa-calendar-check"></i>
-            <div>
+            <div className="stat-box-content">
               <div className="stat-number">{stats.total}</div>
               <div className="stat-label">Total Exams</div>
             </div>
           </div>
           <div className="stat-box scheduled">
             <i className="fas fa-clock"></i>
-            <div>
+            <div className="stat-box-content">
               <div className="stat-number">{stats.scheduled}</div>
               <div className="stat-label">Scheduled</div>
             </div>
           </div>
           <div className="stat-box ongoing">
             <i className="fas fa-hourglass-half"></i>
-            <div>
+            <div className="stat-box-content">
               <div className="stat-number">{stats.ongoing}</div>
               <div className="stat-label">Ongoing</div>
             </div>
           </div>
           <div className="stat-box completed">
             <i className="fas fa-check-circle"></i>
-            <div>
+            <div className="stat-box-content">
               <div className="stat-number">{stats.completed}</div>
               <div className="stat-label">Completed</div>
             </div>
@@ -406,12 +406,15 @@ export default function ExamSchedule() {
             </select>
           </div>
 
-          <button className="filter-btn" onClick={applyFilters}>
-            <i className="fas fa-search"></i> Apply
-          </button>
-          <button className="reset-btn" onClick={resetFilters}>
-            <i className="fas fa-redo"></i> Reset
-          </button>
+          <div className="btnss">
+
+            <button className="filter-btn" onClick={applyFilters}>
+              <i className="fas fa-search"></i> Apply
+            </button>
+            <button className="reset-btn" onClick={resetFilters}>
+              <i className="fas fa-redo"></i> Reset
+            </button>
+          </div>
         </div>
 
         <button className="add-exam-btn" onClick={() => setShowModal(true)}>

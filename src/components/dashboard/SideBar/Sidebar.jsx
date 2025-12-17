@@ -11,12 +11,13 @@ const menuConfig = [
       "Online Forms",
       "Student by category",
       "Manage status",
+      "Promote Students",
     ],
   },
   {
     key: "attendance",
     label: "Attendance",
-    items: ["Student Attendance", "Attendance by Category", "Approve Leave"],
+    items: ["Student Attendance", "Zoom Attendance", "Attendance by Category", "Approve Leave"],
   },
   {
     key: "examinations",
@@ -108,7 +109,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar__brand" onClick={naviLink}>
         <img src="/logo.png" alt="Khuddam" className="sidebar__logo" />
-        <h1 className="sidebar__title">Khuddam Learning</h1>
+        <h1 className="sidebar__title">Khuddam Learning Online CLasses</h1>
       </div>
 
       <nav className="sidebar__nav" aria-label="Dashboard Navigation">
@@ -189,7 +190,9 @@ function buildPath(sectionLabel, itemLabel) {
     "Online Forms": "online-forms",
     "Student by category": "student-by-category",
     "Manage status": "manage-status",
+    "Promote Students": "promote-students",
     "Student Attendance": "student-attendance",
+    "Zoom Attendance": "zoom-attendance",
     "Attendance by Category": "attendance-by-category",
     "Approve Leave": "approve-leave",
     "Exam Schedule": "exam-schedule",

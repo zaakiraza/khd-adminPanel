@@ -53,31 +53,52 @@ export default function StudentDetails() {
       <div className="heading">
         <h1>Students Currently Active</h1>
       </div>
+      
       <div className="extras">
+        <div className="filters">
+          <div className="filter">
+            <select
+              name="enrolled_class"
+              id="enrolled_class"
+              value={enrolled_class}
+              onChange={(e) => {
+                setEnrolled_class(e.target.value);
+              }}
+            >
+              <option value="">All Classes</option>
+              <option value="Atfaal-Awal">Atfaal-Awal</option>
+              <option value="Atfaal-doam">Atfaal-doam</option>
+              <option value="Awwal">Awwal</option>
+              <option value="Doam">Doam</option>
+              <option value="Soam">Soam</option>
+              <option value="Chaharum">Chaharum</option>
+            </select>
+          </div>
+        </div>
+        
         <div className="pagination">
           <button
             disabled={page === 1}
-            style={{ cursor: page === 1 ? "not-allowed" : "pointer" }}
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           >
             Previous
           </button>
           <span>
-            Page {page} of {totalPages}
+            Page {page} of {totalPages || 1}
           </span>
           <button
             onClick={() => setPage((prev) => prev + 1)}
-            disabled={page === totalPages}
-            style={{ cursor: page === totalPages ? "not-allowed" : "pointer" }}
+            disabled={page === totalPages || totalPages === 0}
           >
             Next
           </button>
         </div>
+        
         <div className="limithandle">
           <p>
-            records:<strong>{totalUsers}</strong>
+            Total: <strong>{totalUsers}</strong>
           </p>
-          <label htmlFor="limit">Records per page: </label>
+          <label htmlFor="limit">Per page:</label>
           <select
             name="limit"
             id="limit"
@@ -91,25 +112,7 @@ export default function StudentDetails() {
           </select>
         </div>
       </div>
-      <div className="filters">
-        <div className="filter">
-          <select
-            name="enrolled_class"
-            id="enrolled_class"
-            onChange={(e) => {
-              setEnrolled_class(e.target.value);
-            }}
-          >
-            <option value="">-- Group - All --</option>
-            <option value="Atfaal-Awal">Atfaal-Awal</option>
-            <option value="Atfaal-doam">Atfaal-doam</option>
-            <option value="Awwal">Awwal</option>
-            <option value="Doam">Doam</option>
-            <option value="Soam">Soam</option>
-            <option value="Chaharum">Chaharum</option>
-          </select>
-        </div>
-      </div>
+      
       <table>
         <thead>
           <tr>

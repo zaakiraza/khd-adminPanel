@@ -389,7 +389,6 @@
   align-items: center;
   justify-content: center;
   min-width: 36px;
-  height: 36px;
 }
 
 .view-btn {
@@ -669,8 +668,8 @@ form {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
-  padding: 20px;
+  /* margin-top: 30px; */
+  /* padding: 20px; */
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   backdrop-filter: blur(10px);

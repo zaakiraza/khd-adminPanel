@@ -5,8 +5,10 @@ export { default as OnlineFormDetailView } from "./Students/OnlineForms/OnlineFo
 export { default as StudentByCategory } from "./Students/StudentByCategory/StudentByCategory";
 export { default as StudentByCategoryDetailView } from "./Students/StudentByCategory/StudentByCategoryDetailView";
 export { default as ManageStatus } from "./Students/ManageStatus/ManageStatus";
+export { default as PromoteStudents } from "./Students/PromoteStudents/PromoteStudents";
 
 export { default as StudentAttendance } from "./Attendance/StudentAttendance/StudentAttendance";
+export { default as ZoomAttendance } from "./Attendance/ZoomAttendance/ZoomAttendance";
 export { default as AttendanceByCategory } from "./Attendance/AttendanceByCategory/AttendanceByCategory";
 export { default as ApproveLeave } from "./Attendance/ApproveLeave/ApproveLeave";
 

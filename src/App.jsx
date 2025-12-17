@@ -14,7 +14,9 @@ import {
   StudentByCategory,
   StudentByCategoryDetailView,
   ManageStatus,
+  PromoteStudents,
   StudentAttendance,
+  ZoomAttendance,
   AttendanceByCategory,
   ApproveLeave,
   ExamSchedule,
@@ -82,11 +84,16 @@ function App() {
               element={<StudentByCategoryDetailView />}
             />
             <Route path="students/manage-status" element={<ManageStatus />} />
+            <Route path="students/promote-students" element={<PromoteStudents />} />
 
             {/* Attendance */}
             <Route
               path="attendance/student-attendance"
               element={<StudentAttendance />}
+            />
+            <Route
+              path="attendance/zoom-attendance"
+              element={<ZoomAttendance />}
             />
             <Route
               path="attendance/attendance-by-category"
