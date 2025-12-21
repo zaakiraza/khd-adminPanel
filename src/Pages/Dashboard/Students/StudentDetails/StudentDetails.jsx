@@ -49,14 +49,14 @@ export default function StudentDetails() {
   }, [page, limit, enrolled_class]);
 
   return (
-    <section className="container">
-      <div className="heading">
+    <section className="sd-container">
+      <div className="sd-heading">
         <h1>Students Currently Active</h1>
       </div>
       
-      <div className="extras">
-        <div className="filters">
-          <div className="filter">
+      <div className="sd-extras">
+        <div className="sd-filters">
+          <div className="sd-filter">
             <select
               name="enrolled_class"
               id="enrolled_class"
@@ -76,7 +76,7 @@ export default function StudentDetails() {
           </div>
         </div>
         
-        <div className="pagination">
+        <div className="sd-pagination">
           <button
             disabled={page === 1}
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
@@ -94,7 +94,7 @@ export default function StudentDetails() {
           </button>
         </div>
         
-        <div className="limithandle">
+        <div className="sd-limithandle">
           <p>
             Total: <strong>{totalUsers}</strong>
           </p>
@@ -113,7 +113,7 @@ export default function StudentDetails() {
         </div>
       </div>
       
-      <table>
+      <table className="sd-table">
         <thead>
           <tr>
             <th>Roll No</th>
@@ -151,9 +151,6 @@ export default function StudentDetails() {
                     title="View Details"
                   ></i>
                 </td>
-                {/* <td>
-                  <i className="fa-solid fa-trash"></i>
-                </td> */}
               </tr>
             ))
           )}

@@ -225,7 +225,8 @@
   background: var(--color-forest);
   color: #ffffff;
   white-space: nowrap;
-  margin: 6px 0;
+  position: absolute;
+  right: 70px;
 }
 
 .filter-btn {
@@ -264,7 +265,7 @@
 /* Exams Grid */
 .exams-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 1.5rem;
 }
 
@@ -272,30 +273,33 @@
 .exam-card {
   background: #ffffff;
   border-radius: var(--radius-md);
-  padding: 1.5rem;
+  padding: 0;
   box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(144, 171, 139, 0.12);
+  border: 1px solid rgba(144, 171, 139, 0.2);
   transition: var(--transition-normal);
-  border-left: 4px solid rgba(144, 171, 139, 0.3);
+  border-left: 4px solid var(--color-sage);
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
 }
 
 .exam-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
   border-left-color: var(--color-forest);
+  border-color: rgba(144, 171, 139, 0.4);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.25rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(144, 171, 139, 0.1);
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #55725e 0%, #394650 100%) !important;
+  color: #ffffff;
   gap: 1rem;
+  margin-bottom: 0;
 }
 
 .exam-title {
@@ -304,7 +308,7 @@
 }
 
 .exam-title h3 {
-  color: var(--color-slate);
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
@@ -315,19 +319,24 @@
 }
 
 .exam-title h3 i {
-  color: var(--color-forest);
+  color: var(--color-cream);
   flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
 }
 
 .subject-badge {
   display: inline-block;
   padding: 0.375rem 0.875rem;
-  background: rgba(90, 120, 153, 0.1);
-  color: var(--color-info);
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
   border-radius: var(--radius-full);
   font-size: 0.8125rem;
   font-weight: 600;
   margin-top: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .status-badge {
@@ -339,23 +348,31 @@
 }
 
 .status-badge.status-scheduled {
-  background: var(--color-warning-light);
-  color: var(--color-warning);
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .status-badge.status-ongoing {
-  background: rgba(90, 120, 99, 0.15);
-  color: var(--color-forest);
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .status-badge.status-completed {
-  background: var(--color-success-light);
-  color: var(--color-success);
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .status-badge.status-cancelled {
-  background: var(--color-error-light);
-  color: var(--color-error);
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 /* Exam Details */
@@ -365,6 +382,7 @@
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   flex: 1;
+  padding: 1.5rem;
 }
 
 .detail-row {
@@ -372,8 +390,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: rgba(235, 244, 221, 0.5);
+  background: var(--color-cream-light);
   border-radius: var(--radius-sm);
+  border: 1px solid rgba(144, 171, 139, 0.15);
 }
 
 .detail-row i {
@@ -402,8 +421,10 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: auto;
+  padding: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(144, 171, 139, 0.1);
+  border-top: 1px solid rgba(144, 171, 139, 0.15);
+  background: rgba(235, 244, 221, 0.3);
 }
 
 .action-btn {
@@ -421,7 +442,9 @@
   gap: 0.4rem;
   transition: var(--transition-normal);
   color: #ffffff;
+  width: 100%;
 }
+
 
 .action-btn:hover {
   transform: translateY(-2px);
@@ -429,7 +452,7 @@
 }
 
 .edit-btn {
-  background: var(--color-forest);
+  background: #4c6955 !important;
   color: #ffffff;
 }
 
@@ -465,7 +488,7 @@
 }
 
 .delete-btn {
-  background: var(--color-error);
+  background: #2e3840 !important;
   color: #ffffff;
 }
 
@@ -474,7 +497,7 @@
 }
 
 .questions-btn {
-  background: var(--color-info);
+  background: #2e3840;
   color: #ffffff;
 }
 

@@ -1,16 +1,17 @@
 /* =====================================================
    KHUDDAM ADMIN PANEL - MANAGE STATUS
    Color Theme: #EBF4DD, #90AB8B, #5A7863, #3B4953
+   Prefix: ms- (manage-status)
    ===================================================== */
 
-.container {
+.ms-container {
   padding: 32px;
   font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
   background: linear-gradient(135deg, #EBF4DD 0%, #e0ecd0 100%);
   min-height: 100vh;
 }
 
-.heading {
+.ms-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,7 +20,7 @@
   border-bottom: 2px solid rgba(144, 171, 139, 0.3);
 }
 
-.heading h1 {
+.ms-heading h1 {
   margin: 0;
   font-size: 1.75rem;
   color: #3B4953;
@@ -28,7 +29,7 @@
 }
 
 /* Status Info Banner */
-.status-info {
+.ms-status-info {
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   padding: 20px 24px;
   border-radius: 14px;
@@ -36,7 +37,7 @@
   box-shadow: 0 8px 24px rgba(90, 120, 99, 0.25);
 }
 
-.info-badge {
+.ms-info-badge {
   color: #EBF4DD;
   margin: 0;
   font-size: 15px;
@@ -46,11 +47,11 @@
   font-weight: 500;
 }
 
-.info-badge i {
+.ms-info-badge i {
   font-size: 20px;
 }
 
-.info-badge strong {
+.ms-info-badge strong {
   background: rgba(255, 255, 255, 0.2);
   padding: 6px 14px;
   border-radius: 20px;
@@ -58,7 +59,7 @@
 }
 
 /* Promotion Section */
-.promotion-section {
+.ms-promotion-section {
   background: #ffffff;
   padding: 28px;
   border-radius: 16px;
@@ -67,7 +68,7 @@
   border: 1px solid rgba(144, 171, 139, 0.1);
 }
 
-.promotion-section h2 {
+.ms-promotion-section h2 {
   margin: 0 0 24px 0;
   color: #3B4953;
   font-size: 1.25rem;
@@ -77,21 +78,21 @@
   gap: 12px;
 }
 
-.promotion-section h2 i {
+.ms-promotion-section h2 i {
   color: #5A7863;
   background: rgba(90, 120, 99, 0.1);
   padding: 10px;
   border-radius: 10px;
 }
 
-.promotion-controls {
+.ms-promotion-controls {
   display: flex;
   gap: 20px;
   align-items: flex-end;
   flex-wrap: wrap;
 }
 
-.promotion-filter {
+.ms-promotion-filter {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -99,7 +100,7 @@
   min-width: 200px;
 }
 
-.promotion-filter label {
+.ms-promotion-filter label {
   color: #3B4953;
   font-weight: 600;
   font-size: 13px;
@@ -107,7 +108,7 @@
   letter-spacing: 0.5px;
 }
 
-.promotion-filter select {
+.ms-promotion-filter select {
   padding: 14px 18px;
   border: 2px solid rgba(144, 171, 139, 0.3);
   border-radius: 10px;
@@ -123,17 +124,17 @@
   background-position: right 16px center;
 }
 
-.promotion-filter select:focus {
+.ms-promotion-filter select:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 4px rgba(90, 120, 99, 0.15);
 }
 
-.promotion-filter select:hover {
+.ms-promotion-filter select:hover {
   border-color: #5A7863;
 }
 
-.promote-btn {
+.ms-promote-btn {
   padding: 14px 28px;
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   color: #EBF4DD;
@@ -150,25 +151,25 @@
   white-space: nowrap;
 }
 
-.promote-btn:hover:not(:disabled) {
+.ms-promote-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #6a8873 0%, #5A7863 100%);
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(90, 120, 99, 0.35);
 }
 
-.promote-btn:disabled {
+.ms-promote-btn:disabled {
   background: #90AB8B;
   cursor: not-allowed;
   opacity: 0.6;
   box-shadow: none;
 }
 
-.promote-btn i {
+.ms-promote-btn i {
   font-size: 16px;
 }
 
 /* Age Criteria Section */
-.age-criteria-section {
+.ms-age-criteria-section {
   margin-top: 28px;
   padding: 24px;
   background: linear-gradient(135deg, #f8faf5 0%, #f3f7ee 100%);
@@ -176,7 +177,7 @@
   border: 2px solid rgba(144, 171, 139, 0.3);
 }
 
-.age-criteria-section h3 {
+.ms-age-criteria-section h3 {
   margin: 0 0 24px 0;
   color: #3B4953;
   font-size: 1.1rem;
@@ -186,11 +187,11 @@
   gap: 12px;
 }
 
-.age-criteria-section h3 i {
+.ms-age-criteria-section h3 i {
   color: #5A7863;
 }
 
-.age-criteria-row {
+.ms-age-criteria-row {
   display: flex;
   gap: 16px;
   align-items: flex-end;
@@ -201,21 +202,21 @@
   box-shadow: 0 2px 8px rgba(59, 73, 83, 0.06);
 }
 
-.age-input-group {
+.ms-age-input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex: 1;
 }
 
-.age-input-group label {
+.ms-age-input-group label {
   color: #5A7863;
   font-weight: 600;
   font-size: 13px;
 }
 
-.age-input-group input,
-.age-input-group select {
+.ms-age-input-group input,
+.ms-age-input-group select {
   padding: 12px 14px;
   border: 2px solid rgba(144, 171, 139, 0.3);
   border-radius: 10px;
@@ -225,14 +226,14 @@
   color: #3B4953;
 }
 
-.age-input-group input:focus,
-.age-input-group select:focus {
+.ms-age-input-group input:focus,
+.ms-age-input-group select:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 4px rgba(90, 120, 99, 0.15);
 }
 
-.remove-criteria-btn {
+.ms-remove-criteria-btn {
   padding: 12px 18px;
   background: linear-gradient(135deg, #c45c5c 0%, #b04a4a 100%);
   color: #ffffff;
@@ -244,13 +245,13 @@
   height: 46px;
 }
 
-.remove-criteria-btn:hover {
+.ms-remove-criteria-btn:hover {
   background: linear-gradient(135deg, #d46b6b 0%, #c45c5c 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(196, 92, 92, 0.3);
 }
 
-.add-criteria-btn {
+.ms-add-criteria-btn {
   padding: 12px 24px;
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   color: #EBF4DD;
@@ -266,18 +267,18 @@
   margin-top: 12px;
 }
 
-.add-criteria-btn:hover {
+.ms-add-criteria-btn:hover {
   background: linear-gradient(135deg, #6a8873 0%, #5A7863 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(90, 120, 99, 0.3);
 }
 
-.add-criteria-btn i {
+.ms-add-criteria-btn i {
   font-size: 14px;
 }
 
 /* Selection Controls */
-.selection-controls {
+.ms-selection-controls {
   display: flex;
   gap: 12px;
   margin-top: 20px;
@@ -285,8 +286,8 @@
   border-top: 2px solid rgba(144, 171, 139, 0.2);
 }
 
-.select-all-btn,
-.unselect-all-btn {
+.ms-select-all-btn,
+.ms-unselect-all-btn {
   padding: 12px 24px;
   border: none;
   border-radius: 10px;
@@ -299,44 +300,44 @@
   transition: all 0.25s ease;
 }
 
-.select-all-btn {
+.ms-select-all-btn {
   background: linear-gradient(135deg, #5a7899 0%, #4a6889 100%);
   color: #ffffff;
   box-shadow: 0 4px 16px rgba(90, 120, 153, 0.25);
 }
 
-.select-all-btn:hover:not(:disabled) {
+.ms-select-all-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #6a88a9 0%, #5a7899 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(90, 120, 153, 0.35);
 }
 
-.unselect-all-btn {
+.ms-unselect-all-btn {
   background: linear-gradient(135deg, #c45c5c 0%, #b04a4a 100%);
   color: #ffffff;
   box-shadow: 0 4px 16px rgba(196, 92, 92, 0.25);
 }
 
-.unselect-all-btn:hover:not(:disabled) {
+.ms-unselect-all-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #d46b6b 0%, #c45c5c 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(196, 92, 92, 0.35);
 }
 
-.select-all-btn:disabled,
-.unselect-all-btn:disabled {
+.ms-select-all-btn:disabled,
+.ms-unselect-all-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-.select-all-btn i,
-.unselect-all-btn i {
+.ms-select-all-btn i,
+.ms-unselect-all-btn i {
   font-size: 14px;
 }
 
 /* Extras Section */
-.extras {
+.ms-extras {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -346,13 +347,13 @@
   gap: 16px;
 }
 
-.pagination {
+.ms-pagination {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.pagination button {
+.ms-pagination button {
   padding: 10px 18px;
   background-color: #ffffff;
   color: #3B4953;
@@ -363,47 +364,46 @@
   font-weight: 600;
 }
 
-.pagination button:hover:not(:disabled) {
+.ms-pagination button:hover:not(:disabled) {
   border-color: #5A7863;
   background: #f8faf5;
 }
 
-.pagination button:disabled {
+.ms-pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.pagination span {
+.ms-pagination span {
   font-weight: 600;
   color: #3B4953;
   padding: 0 8px;
 }
 
-.limithandle {
+.ms-limithandle {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.limithandle p {
+.ms-limithandle p {
   margin: 0;
   color: #5A7863;
   font-weight: 500;
 }
 
-.limithandle strong {
+.ms-limithandle strong {
   color: #5A7863;
   font-size: 18px;
   font-weight: 700;
 }
 
-.limithandle label {
+.ms-limithandle label {
   color: #3B4953;
   font-weight: 600;
 }
 
-.limithandle select {
-  /* padding: 10px 36px 10px 14px; */
+.ms-limithandle select {
   border: 2px solid rgba(144, 171, 139, 0.3);
   border-radius: 10px;
   cursor: pointer;
@@ -416,26 +416,26 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235A7863' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
+  padding: 10px 36px 10px 14px;
 }
 
-.limithandle select:focus {
+.ms-limithandle select:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 4px rgba(90, 120, 99, 0.15);
 }
 
 /* Search Section */
-.search {
+.ms-search {
   display: flex;
   justify-content: center;
   margin-bottom: 24px;
   gap: 12px;
 }
 
-.search input {
+.ms-search input {
   padding: 14px 20px;
   width: 100%;
-  /* max-width: 600px; */
   border: 2px solid rgba(144, 171, 139, 0.3);
   border-radius: 12px;
   font-size: 15px;
@@ -445,13 +445,13 @@
   background: #ffffff;
 }
 
-.search input:focus {
+.ms-search input:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 4px rgba(90, 120, 99, 0.15);
 }
 
-.search button {
+.ms-search button {
   padding: 14px 28px;
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   color: #EBF4DD;
@@ -463,14 +463,14 @@
   font-weight: 600;
 }
 
-.search button:hover {
+.ms-search button:hover {
   background: linear-gradient(135deg, #6a8873 0%, #5A7863 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(90, 120, 99, 0.3);
 }
 
 /* Table Styles */
-table {
+.ms-table {
   width: 100%;
   border-collapse: collapse;
   background: #ffffff;
@@ -479,12 +479,12 @@ table {
   box-shadow: 0 4px 20px rgba(59, 73, 83, 0.08);
 }
 
-thead {
+.ms-table thead {
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   color: #EBF4DD;
 }
 
-thead th {
+.ms-table thead th {
   padding: 18px 20px;
   text-align: left;
   font-weight: 600;
@@ -493,20 +493,20 @@ thead th {
   text-transform: uppercase;
 }
 
-tbody tr {
+.ms-table tbody tr {
   border-bottom: 1px solid rgba(144, 171, 139, 0.15);
   transition: all 0.2s ease;
 }
 
-tbody tr:hover {
+.ms-table tbody tr:hover {
   background-color: #f8faf5;
 }
 
-tbody tr:last-child {
+.ms-table tbody tr:last-child {
   border-bottom: none;
 }
 
-tbody td {
+.ms-table tbody td {
   padding: 18px 20px;
   color: #3B4953;
   font-size: 14px;
@@ -514,7 +514,7 @@ tbody td {
 }
 
 /* Checkbox Styles */
-input[type="checkbox"] {
+.ms-table input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -523,7 +523,7 @@ input[type="checkbox"] {
 }
 
 /* Class Badges */
-.no-class-badge {
+.ms-no-class-badge {
   display: inline-block;
   padding: 8px 16px;
   background: rgba(196, 92, 92, 0.15);
@@ -533,7 +533,7 @@ input[type="checkbox"] {
   font-size: 13px;
 }
 
-.class-badge {
+.ms-class-badge {
   display: inline-block;
   padding: 8px 16px;
   background: rgba(90, 120, 99, 0.15);
@@ -543,93 +543,65 @@ input[type="checkbox"] {
   font-size: 13px;
 }
 
-/* Class Select Dropdown */
-.class-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid rgba(144, 171, 139, 0.3);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-size: 14px;
-  font-weight: 500;
-  color: #3B4953;
-  background: #ffffff;
-}
-
-.class-select:focus {
-  outline: none;
-  border-color: #5A7863;
-  box-shadow: 0 0 0 4px rgba(90, 120, 99, 0.15);
-}
-
-.class-select:hover {
-  border-color: #5A7863;
-}
-
-.class-select option {
-  padding: 12px;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
-  .container {
+  .ms-container {
     padding: 16px;
   }
 
-  .extras {
+  .ms-extras {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .pagination,
-  .limithandle {
+  .ms-pagination,
+  .ms-limithandle {
     justify-content: center;
   }
 
-  table {
+  .ms-table {
     font-size: 12px;
   }
 
-  thead th,
-  tbody td {
+  .ms-table thead th,
+  .ms-table tbody td {
     padding: 14px 12px;
   }
 
-  .heading h1 {
+  .ms-heading h1 {
     font-size: 1.4rem;
   }
 
-  .promotion-controls {
+  .ms-promotion-controls {
     flex-direction: column;
   }
 
-  .promotion-filter {
+  .ms-promotion-filter {
     min-width: 100%;
   }
 
-  .age-criteria-row {
+  .ms-age-criteria-row {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .remove-criteria-btn {
+  .ms-remove-criteria-btn {
     width: 100%;
   }
 
-  .selection-controls {
+  .ms-selection-controls {
     flex-direction: column;
   }
 
-  .select-all-btn,
-  .unselect-all-btn {
+  .ms-select-all-btn,
+  .ms-unselect-all-btn {
     width: 100%;
     justify-content: center;
   }
 }
 
 @media (max-width: 992px) {
-  table {
+  .ms-table-wrapper {
     display: block;
     overflow-x: auto;
     white-space: nowrap;

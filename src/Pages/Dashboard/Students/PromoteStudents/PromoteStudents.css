@@ -36,7 +36,7 @@
 }
 
 .subtitle {
-  color: #5A7863;
+  color: #5A7863 !important;
   font-size: 1rem;
   font-weight: 500;
 }

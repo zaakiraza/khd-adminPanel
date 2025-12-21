@@ -96,35 +96,35 @@ export default function StudentByCategory() {
   };
 
   return (
-    <section className="container">
-      <div className="heading">
+    <section className="sbc-container">
+      <div className="sbc-heading">
         <h1>All Students By Category</h1>
       </div>
-      <div className="extras">
-        <div className="pagination">
+      
+      <div className="sbc-extras">
+        <div className="sbc-pagination">
           <button
             disabled={page === 1}
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            style={{ cursor: page === 1 ? "not-allowed" : "pointer" }}
           >
             Previous
           </button>
           <span>
-            Page {page} of {totalPages}
+            Page {page} of {totalPages || 1}
           </span>
           <button
             onClick={() => setPage((prev) => prev + 1)}
-            disabled={page === totalPages}
-            style={{ cursor: page === totalPages ? "not-allowed" : "pointer" }}
+            disabled={page === totalPages || totalPages === 0}
           >
             Next
           </button>
         </div>
-        <div className="limithandle">
+        
+        <div className="sbc-limithandle">
           <p>
-            records:<strong>{totalUsers}</strong>
+            Total: <strong>{totalUsers}</strong>
           </p>
-          <label htmlFor="limit">Records per page: </label>
+          <label htmlFor="limit">Per page:</label>
           <select
             name="limit"
             id="limit"
@@ -138,21 +138,24 @@ export default function StudentByCategory() {
           </select>
         </div>
       </div>
-      <div className="search">
+      
+      <div className="sbc-search">
         <input
           type="text"
           placeholder="Search by Name, Email, Phone Number"
+          value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key == "Enter") checkforEmpty(searchInput);
+            if (e.key === "Enter") checkforEmpty(searchInput);
           }}
         />
         <button onClick={() => checkforEmpty(searchInput)}>
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
-      <div className="filters">
-        <div className="filter">
+      
+      <div className="sbc-filters">
+        <div className="sbc-filter">
           <select
             name="enrolled_year"
             id="enrolled_year"
@@ -167,19 +170,19 @@ export default function StudentByCategory() {
             <option value="2025">2025</option>
           </select>
         </div>
-        <div className="filter">
+        <div className="sbc-filter">
           <select
             name="verified"
             id="verified"
             value={verified}
             onChange={(e) => setVerified(e.target.value)}
           >
-            <option value="">-- Verifyed - All --</option>
+            <option value="">-- Verified - All --</option>
             <option value="true">Verified</option>
             <option value="false">Not Verified</option>
           </select>
         </div>
-        <div className="filter">
+        <div className="sbc-filter">
           <select
             name="status"
             id="status"
@@ -191,14 +194,14 @@ export default function StudentByCategory() {
             <option value="inactive">In-Active</option>
           </select>
         </div>
-        <div className="filter">
+        <div className="sbc-filter">
           <select
             name="application_status"
             id="application_status"
             value={application_status}
             onChange={(e) => {
               setApplication_status(e.target.value);
-              e.target.value == "rejected"
+              e.target.value === "rejected"
                 ? setStatus("inactive")
                 : setStatus("");
             }}
@@ -209,7 +212,8 @@ export default function StudentByCategory() {
           </select>
         </div>
       </div>
-      <table>
+      
+      <table className="sbc-table">
         <thead>
           <tr>
             <th>Roll No</th>
@@ -229,7 +233,7 @@ export default function StudentByCategory() {
             </tr>
           ) : error ? (
             <tr>
-              <td colSpan="6" style={{ textAlign: "center", color: "red" }}>
+              <td colSpan="6" style={{ textAlign: "center", color: "#c45c5c" }}>
                 {error}
               </td>
             </tr>
@@ -244,14 +248,14 @@ export default function StudentByCategory() {
                   <i 
                     className="fa-solid fa-pen"
                     onClick={() => handleEdit(student._id)}
-                    style={{ cursor: "pointer", color: "#007bff" }}
+                    title="Edit Student"
                   ></i>
                 </td>
                 <td>
                   <i 
                     className="fa-solid fa-trash"
                     onClick={() => handleDelete(student._id, student.personal_info.first_name)}
-                    style={{ cursor: "pointer", color: "#dc3545" }}
+                    title="Mark as Inactive"
                   ></i>
                 </td>
               </tr>

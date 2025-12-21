@@ -161,7 +161,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  /* color: #EBF4DD; */
+  color: #EBF4DD;
   font-size: 1rem;
   font-weight: 500;
 }

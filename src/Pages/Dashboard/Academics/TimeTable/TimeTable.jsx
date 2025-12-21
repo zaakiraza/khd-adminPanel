@@ -135,36 +135,38 @@ export default function TimeTable() {
   };
 
   return (
-    <section className="timetable-container">
-      <div className="heading">
-        <h1>Class Timetable Management</h1>
-        <p className="subtitle">Set and manage schedules for active classes</p>
+    <section className="tt-container">
+      <div className="tt-heading">
+        <div>
+          <h1>Class Timetable Management</h1>
+          <p className="subtitle">Set and manage schedules for active classes</p>
+        </div>
       </div>
 
       {loading ? (
-        <div className="loading-state">
+        <div className="tt-loading-state">
           <i className="fa-solid fa-spinner fa-spin"></i>
           <p>Loading classes...</p>
         </div>
       ) : classes.length > 0 ? (
-        <div className="timetable-grid">
+        <div className="tt-grid">
           {classes.map((classData) => (
             <div
               key={classData._id}
-              className={`timetable-card ${getScheduleStatus(classData)}`}
+              className={`tt-card ${getScheduleStatus(classData)}`}
             >
-              <div className="card-header">
-                <div className="class-info">
+              <div className="tt-card-header">
+                <div className="tt-class-info">
                   <h3>{classData.class_name}</h3>
                   {classData.teacher_assigned && (
-                    <span className="teacher-badge">
+                    <span className="tt-teacher-badge">
                       <i className="fa-solid fa-chalkboard-user"></i>{" "}
                       {classData.teacher_assigned}
                     </span>
                   )}
                 </div>
                 <span
-                  className={`status-indicator ${getScheduleStatus(classData)}`}
+                  className={`tt-status-indicator ${getScheduleStatus(classData)}`}
                 >
                   {getScheduleStatus(classData) === "scheduled" ? (
                     <>
@@ -180,8 +182,8 @@ export default function TimeTable() {
               </div>
 
               {editingClass === classData._id ? (
-                <div className="edit-form">
-                  <div className="form-group">
+                <div className="tt-edit-form">
+                  <div className="tt-form-group">
                     <label htmlFor={`timing-${classData._id}`}>
                       <i className="fa-solid fa-clock"></i> Class Timing:
                     </label>
@@ -195,7 +197,7 @@ export default function TimeTable() {
                     />
                   </div>
 
-                  <div className="form-group">
+                  <div className="tt-form-group">
                     <label htmlFor={`day-${classData._id}`}>
                       <i className="fa-solid fa-calendar-days"></i> Class Day:
                     </label>
@@ -215,31 +217,31 @@ export default function TimeTable() {
                     </select>
                   </div>
 
-                  <div className="form-actions">
+                  <div className="tt-form-actions">
                     <button
-                      className="save-btn"
+                      className="tt-save-btn"
                       onClick={() => handleSave(classData._id)}
                     >
                       <i className="fa-solid fa-check"></i> Save
                     </button>
-                    <button className="cancel-btn" onClick={handleCancel}>
+                    <button className="tt-cancel-btn" onClick={handleCancel}>
                       <i className="fa-solid fa-times"></i> Cancel
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="schedule-display">
+                <div className="tt-schedule-display">
                   {classData.class_timing && classData.class_day ? (
                     <>
-                      <div className="schedule-info">
-                        <div className="info-item">
+                      <div className="tt-schedule-info">
+                        <div className="tt-info-item">
                           <i className="fa-solid fa-calendar-days"></i>
                           <div>
                             <span className="label">Day</span>
                             <span className="value">{classData.class_day}</span>
                           </div>
                         </div>
-                        <div className="info-item">
+                        <div className="tt-info-item">
                           <i className="fa-solid fa-clock"></i>
                           <div>
                             <span className="label">Time</span>
@@ -249,15 +251,15 @@ export default function TimeTable() {
                           </div>
                         </div>
                       </div>
-                      <div className="card-actions">
+                      <div className="tt-card-actions">
                         <button
-                          className="edit-btn"
+                          className="tt-edit-btn"
                           onClick={() => handleEdit(classData)}
                         >
                           <i className="fa-solid fa-pen"></i> Edit
                         </button>
                         <button
-                          className="clear-btn"
+                          className="tt-clear-btn"
                           onClick={() => handleClearSchedule(classData._id)}
                         >
                           <i className="fa-solid fa-trash"></i> Clear
@@ -265,11 +267,11 @@ export default function TimeTable() {
                       </div>
                     </>
                   ) : (
-                    <div className="no-schedule">
+                    <div className="tt-no-schedule">
                       <i className="fa-solid fa-calendar-xmark"></i>
                       <p>No schedule set</p>
                       <button
-                        className="add-btn"
+                        className="tt-add-btn"
                         onClick={() => handleEdit(classData)}
                       >
                         <i className="fa-solid fa-plus"></i> Add Schedule
@@ -282,7 +284,7 @@ export default function TimeTable() {
           ))}
         </div>
       ) : (
-        <div className="empty-state">
+        <div className="tt-empty-state">
           <i className="fa-solid fa-calendar-xmark"></i>
           <p>No active classes found</p>
           <span>Please add active classes to create timetables</span>
@@ -291,26 +293,26 @@ export default function TimeTable() {
 
       {/* Summary Section */}
       {classes.length > 0 && (
-        <div className="summary-card">
+        <div className="tt-summary-card">
           <h3>
             <i className="fa-solid fa-chart-pie"></i> Summary
           </h3>
-          <div className="summary-stats">
-            <div className="stat-box">
-              <span className="stat-number">{classes.length}</span>
-              <span className="stat-label">Total Active Classes</span>
+          <div className="tt-summary-stats">
+            <div className="tt-stat-box">
+              <span className="tt-stat-number">{classes.length}</span>
+              <span className="tt-stat-label">Total Active Classes</span>
             </div>
-            <div className="stat-box scheduled">
-              <span className="stat-number">
+            <div className="tt-stat-box scheduled">
+              <span className="tt-stat-number">
                 {classes.filter((c) => c.class_timing && c.class_day).length}
               </span>
-              <span className="stat-label">Scheduled</span>
+              <span className="tt-stat-label">Scheduled</span>
             </div>
-            <div className="stat-box unscheduled">
-              <span className="stat-number">
+            <div className="tt-stat-box unscheduled">
+              <span className="tt-stat-number">
                 {classes.filter((c) => !c.class_timing || !c.class_day).length}
               </span>
-              <span className="stat-label">Not Scheduled</span>
+              <span className="tt-stat-label">Not Scheduled</span>
             </div>
           </div>
         </div>

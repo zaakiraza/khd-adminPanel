@@ -91,36 +91,35 @@ export default function OnlineForms() {
   }, [page, limit]);
 
   return (
-    <section className="container">
-      <div className="heading">
+    <section className="of-container">
+      <div className="of-heading">
         <h1>Students Currently Pending</h1>
       </div>
-      <div className="extras">
-        <div className="pagination">
+      
+      <div className="of-extras">
+        <div className="of-pagination">
           <button
             disabled={page === 1}
-            cursor="not-allowed"
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            style={{ cursor: page === 1 ? "not-allowed" : "pointer" }}
           >
             Previous
           </button>
           <span>
-            Page {page} of {totalPages}
+            Page {page} of {totalPages || 1}
           </span>
           <button
             onClick={() => setPage((prev) => prev + 1)}
-            disabled={page === totalPages}
-            style={{ cursor: page === totalPages ? "not-allowed" : "pointer" }}
+            disabled={page === totalPages || totalPages === 0}
           >
             Next
           </button>
         </div>
-        <div className="limithandle">
+        
+        <div className="of-limithandle">
           <p>
-            records:<strong>{totalUsers}</strong>
+            Total: <strong>{totalUsers}</strong>
           </p>
-          <label htmlFor="limit">Records per page: </label>
+          <label htmlFor="limit">Per page:</label>
           <select
             name="limit"
             id="limit"
@@ -134,7 +133,8 @@ export default function OnlineForms() {
           </select>
         </div>
       </div>
-      <table>
+      
+      <table className="of-table">
         <thead>
           <tr>
             <th>Roll No</th>
@@ -149,13 +149,13 @@ export default function OnlineForms() {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="6" style={{ textAlign: "center" }}>
+              <td colSpan="7" style={{ textAlign: "center" }}>
                 Loading...
               </td>
             </tr>
           ) : error ? (
             <tr>
-              <td colSpan="6" style={{ textAlign: "center", color: "red" }}>
+              <td colSpan="7" style={{ textAlign: "center", color: "#c45c5c" }}>
                 {error}
               </td>
             </tr>
@@ -165,15 +165,11 @@ export default function OnlineForms() {
                 <td>{student.personal_info.rollNo}</td>
                 <td>{student.personal_info.first_name}</td>
                 <td>{student.personal_info.father_name}</td>
-                <td
-                  style={{
-                    color:
-                      student.personal_info.age > 19 ||
-                      student.personal_info.age < 9
-                        ? "Red"
-                        : "black",
-                  }}
-                >
+                <td className={
+                  student.personal_info.age > 19 || student.personal_info.age < 9
+                    ? "of-age-warning"
+                    : ""
+                }>
                   {student.personal_info.age}
                 </td>
                 <td>{student.personal_info.whatsapp_no}</td>
@@ -181,14 +177,12 @@ export default function OnlineForms() {
                   <i 
                     className="fa-solid fa-pen"
                     onClick={() => navigate(`/dashboard/students/online-forms/${student._id}`)}
-                    style={{ cursor: "pointer" }}
                     title="View/Edit Details"
                   ></i>
                 </td>
                 <td>
                   <i
                     className="fa-solid fa-trash"
-                    style={{ cursor: "pointer", color: "#dc3545" }}
                     onClick={() =>
                       handleDeleteStudent(
                         student._id,

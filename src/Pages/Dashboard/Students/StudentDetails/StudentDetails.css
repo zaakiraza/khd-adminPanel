@@ -1,9 +1,10 @@
 /* =====================================================
    KHUDDAM ADMIN PANEL - STUDENT DETAILS
    Color Theme: #EBF4DD, #90AB8B, #5A7863, #3B4953
+   Prefix: sd- (student-details)
    ===================================================== */
 
-.container {
+.sd-container {
   padding: 24px;
   font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
   background: linear-gradient(135deg, #EBF4DD 0%, #e0ecd0 100%);
@@ -11,7 +12,7 @@
 }
 
 /* Header Section */
-.heading {
+.sd-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,7 +20,7 @@
   margin-bottom: 24px;
 }
 
-.heading h1 {
+.sd-heading h1 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
@@ -27,7 +28,7 @@
   letter-spacing: -0.3px;
 }
 
-.heading button {
+.sd-heading button {
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   color: #EBF4DD;
   border: none;
@@ -43,14 +44,14 @@
   box-shadow: 0 2px 8px rgba(90, 120, 99, 0.2);
 }
 
-.heading button:hover {
+.sd-heading button:hover {
   background: linear-gradient(135deg, #6a8873 0%, #5A7863 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(90, 120, 99, 0.3);
 }
 
 /* Controls Card - Contains filters, pagination, and limits */
-.extras {
+.sd-extras {
   background: #ffffff;
   border-radius: 12px;
   padding: 14px 20px;
@@ -64,13 +65,13 @@
 }
 
 /* Pagination */
-.pagination {
+.sd-pagination {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.pagination button {
+.sd-pagination button {
   background: #ffffff;
   color: #3B4953;
   border: 1px solid rgba(144, 171, 139, 0.3);
@@ -85,19 +86,19 @@
   line-height: 36px;
 }
 
-.pagination button:hover:not(:disabled) {
+.sd-pagination button:hover:not(:disabled) {
   border-color: #5A7863;
   background: #f8faf5;
   color: #5A7863;
 }
 
-.pagination button:disabled {
+.sd-pagination button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   background: #f5f5f5;
 }
 
-.pagination span {
+.sd-pagination span {
   padding: 0 10px;
   font-weight: 500;
   font-size: 13px;
@@ -108,13 +109,13 @@
 }
 
 /* Limit Handle */
-.limithandle {
+.sd-limithandle {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.limithandle p {
+.sd-limithandle p {
   display: flex;
   align-items: center;
   color: #3B4953;
@@ -128,13 +129,13 @@
   white-space: nowrap;
 }
 
-.limithandle p strong {
+.sd-limithandle p strong {
   color: #5A7863;
   font-weight: 700;
   margin-left: 4px;
 }
 
-.limithandle label {
+.sd-limithandle label {
   color: #5A7863;
   font-size: 13px;
   font-weight: 500;
@@ -143,7 +144,7 @@
   line-height: 38px;
 }
 
-.limithandle select {
+.sd-limithandle select {
   padding: 0 32px 0 12px;
   border-radius: 6px;
   border: 1px solid rgba(144, 171, 139, 0.3);
@@ -160,25 +161,25 @@
   height: 38px;
 }
 
-.limithandle select:hover {
+.sd-limithandle select:hover {
   border-color: #5A7863;
 }
 
-.limithandle select:focus {
+.sd-limithandle select:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 2px rgba(90, 120, 99, 0.1);
 }
 
 /* Filters Section (inside extras) */
-.extras .filters {
+.sd-filters {
   display: flex;
-  padding:0px !important;
-  margin:0px !important;
+  padding: 0 !important;
+  margin: 0 !important;
   align-items: center;
 }
 
-.extras .filters .filter select {
+.sd-filter select {
   padding: 9px 32px 9px 12px;
   border-radius: 6px;
   border: 1px solid rgba(144, 171, 139, 0.3);
@@ -196,18 +197,18 @@
   height: 38px;
 }
 
-.extras .filters .filter select:hover {
+.sd-filter select:hover {
   border-color: #5A7863;
 }
 
-.extras .filters .filter select:focus {
+.sd-filter select:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 2px rgba(90, 120, 99, 0.1);
 }
 
 /* Table Container */
-.table-container {
+.sd-table-container {
   background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
@@ -216,62 +217,62 @@
 }
 
 /* Table Styles */
-table {
+.sd-table {
   width: 100%;
   border-collapse: collapse;
   background-color: #ffffff;
 }
 
-thead tr {
+.sd-table thead tr {
   background: linear-gradient(135deg, #5A7863 0%, #4a6653 100%);
   color: #EBF4DD;
   text-align: left;
 }
 
-th,
-td {
+.sd-table th,
+.sd-table td {
   padding: 14px 18px;
   border-bottom: 1px solid rgba(144, 171, 139, 0.1);
 }
 
-th {
+.sd-table th {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
 }
 
-th:first-child {
+.sd-table th:first-child {
   width: 80px;
 }
 
-th:last-child {
+.sd-table th:last-child {
   width: 60px;
   text-align: center;
 }
 
-tbody tr {
+.sd-table tbody tr {
   transition: all 0.15s ease;
 }
 
-tbody tr:hover {
+.sd-table tbody tr:hover {
   background-color: rgba(235, 244, 221, 0.5);
 }
 
-tbody tr:last-of-type td {
+.sd-table tbody tr:last-of-type td {
   border-bottom: none;
 }
 
-td {
+.sd-table td {
   font-size: 14px;
   color: #3B4953;
 }
 
-td:last-child {
+.sd-table td:last-child {
   text-align: center;
 }
 
-td i {
+.sd-table td i {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 8px 10px;
@@ -279,42 +280,42 @@ td i {
   font-size: 14px;
 }
 
-td .fa-eye {
+.sd-table td .fa-eye {
   color: #5A7863;
   background: rgba(90, 120, 99, 0.08);
 }
 
-td .fa-eye:hover {
+.sd-table td .fa-eye:hover {
   color: #ffffff;
   background: #5A7863;
 }
 
-td .fa-trash {
+.sd-table td .fa-trash {
   color: #c45c5c;
   background: rgba(196, 92, 92, 0.08);
 }
 
-td .fa-trash:hover {
+.sd-table td .fa-trash:hover {
   color: #ffffff;
   background: #c45c5c;
 }
 
 /* Loading & Empty States */
-.loading-row td,
-.error-row td,
-.empty-row td {
+.sd-loading-row td,
+.sd-error-row td,
+.sd-empty-row td {
   text-align: center;
   padding: 40px 20px;
   color: #5A7863;
   font-size: 14px;
 }
 
-.error-row td {
+.sd-error-row td {
   color: #c45c5c;
 }
 
 /* Student Detail View */
-.student-detail-view {
+.sd-detail-view {
   background-color: #ffffff;
   padding: 28px;
   border-radius: 16px;
@@ -322,7 +323,7 @@ td .fa-trash:hover {
   border: 1px solid rgba(144, 171, 139, 0.1);
 }
 
-.detail-section {
+.sd-detail-section {
   margin-bottom: 24px;
   padding: 24px;
   border: 1px solid rgba(144, 171, 139, 0.12);
@@ -332,7 +333,7 @@ td .fa-trash:hover {
   overflow: hidden;
 }
 
-.detail-section::before {
+.sd-detail-section::before {
   content: "";
   position: absolute;
   top: 0;
@@ -342,7 +343,7 @@ td .fa-trash:hover {
   background: linear-gradient(180deg, #5A7863 0%, #90AB8B 100%);
 }
 
-.detail-section h2 {
+.sd-detail-section h2 {
   margin-top: 0;
   margin-bottom: 20px;
   color: #3B4953;
@@ -355,24 +356,24 @@ td .fa-trash:hover {
   gap: 10px;
 }
 
-.detail-section h2 i {
+.sd-detail-section h2 i {
   color: #5A7863;
   font-size: 1rem;
 }
 
-.detail-grid {
+.sd-detail-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 
-.detail-item {
+.sd-detail-item {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.detail-item strong {
+.sd-detail-item strong {
   color: #5A7863;
   font-size: 11px;
   font-weight: 600;
@@ -380,7 +381,7 @@ td .fa-trash:hover {
   letter-spacing: 0.5px;
 }
 
-.detail-item span {
+.sd-detail-item span {
   color: #3B4953;
   font-size: 14px;
   padding: 12px 14px;
@@ -391,7 +392,7 @@ td .fa-trash:hover {
 }
 
 /* Profile Image */
-.profile-image-container {
+.sd-profile-image-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -400,7 +401,7 @@ td .fa-trash:hover {
   gap: 20px;
 }
 
-.profile-image {
+.sd-profile-image {
   width: 160px;
   height: 160px;
   object-fit: cover;
@@ -410,13 +411,13 @@ td .fa-trash:hover {
   transition: all 0.3s ease;
 }
 
-.profile-image:hover {
+.sd-profile-image:hover {
   transform: scale(1.03);
   box-shadow: 0 8px 24px rgba(90, 120, 99, 0.3);
 }
 
 /* Status Badges */
-.status-badge {
+.sd-status-badge {
   display: inline-block;
   padding: 8px 14px !important;
   border-radius: 20px !important;
@@ -427,44 +428,44 @@ td .fa-trash:hover {
   letter-spacing: 0.2px;
 }
 
-.status-badge.active {
+.sd-status-badge.active {
   background: rgba(90, 120, 99, 0.12) !important;
   color: #4a6653 !important;
   border: none !important;
 }
 
-.status-badge.inactive {
+.sd-status-badge.inactive {
   background: rgba(196, 92, 92, 0.12) !important;
   color: #a84444 !important;
   border: none !important;
 }
 
-.status-badge.pending {
+.sd-status-badge.pending {
   background: rgba(212, 168, 83, 0.12) !important;
   color: #a07d30 !important;
   border: none !important;
 }
 
-.status-badge.accepted {
+.sd-status-badge.accepted {
   background: rgba(90, 120, 99, 0.12) !important;
   color: #4a6653 !important;
   border: none !important;
 }
 
-.status-badge.rejected {
+.sd-status-badge.rejected {
   background: rgba(196, 92, 92, 0.12) !important;
   color: #a84444 !important;
   border: none !important;
 }
 
 /* Class History */
-.class-history-list {
+.sd-class-history-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.class-history-item {
+.sd-class-history-item {
   padding: 14px 16px;
   background-color: #ffffff;
   border-radius: 8px;
@@ -473,12 +474,12 @@ td .fa-trash:hover {
   transition: all 0.2s ease;
 }
 
-.class-history-item:hover {
+.sd-class-history-item:hover {
   box-shadow: 0 4px 12px rgba(59, 73, 83, 0.08);
   transform: translateX(3px);
 }
 
-.class-history-item p {
+.sd-class-history-item p {
   margin: 0;
   color: #3B4953;
   font-size: 14px;
@@ -486,14 +487,14 @@ td .fa-trash:hover {
 }
 
 /* Search & Filter */
-.search-filter {
+.sd-search-filter {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-.search-filter input {
+.sd-search-filter input {
   flex: 1;
   min-width: 200px;
   padding: 10px 16px;
@@ -504,13 +505,13 @@ td .fa-trash:hover {
   background: #ffffff;
 }
 
-.search-filter input:focus {
+.sd-search-filter input:focus {
   outline: none;
   border-color: #5A7863;
   box-shadow: 0 0 0 2px rgba(90, 120, 99, 0.1);
 }
 
-.search-filter select {
+.sd-search-filter select {
   padding: 10px 36px 10px 16px;
   border: 1px solid rgba(144, 171, 139, 0.3);
   border-radius: 8px;
@@ -527,114 +528,116 @@ td .fa-trash:hover {
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .extras {
+  .sd-extras {
     flex-wrap: wrap;
     gap: 14px;
   }
   
-  .extras .filters {
+  .sd-filters {
     order: -1;
     width: 100%;
     justify-content: flex-start;
   }
   
-  .pagination {
+  .sd-pagination {
     flex: 1;
     justify-content: center;
   }
   
-  .limithandle {
+  .sd-limithandle {
     flex-wrap: wrap;
     justify-content: flex-end;
   }
 }
 
 @media (max-width: 768px) {
-  .container {
+  .sd-container {
     padding: 16px;
   }
   
-  .heading {
+  .sd-heading {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
   
-  .heading h1 {
+  .sd-heading h1 {
     font-size: 1.25rem;
   }
   
-  .extras {
+  .sd-extras {
     flex-direction: column;
     align-items: stretch;
     padding: 14px;
     gap: 12px;
   }
   
-  .extras .filters {
+  .sd-filters {
     justify-content: stretch;
   }
   
-  .extras .filters .filter {
+  .sd-filter {
     width: 100%;
   }
   
-  .extras .filters .filter select {
+  .sd-filter select {
     width: 100%;
   }
   
-  .pagination {
+  .sd-pagination {
     justify-content: center;
   }
   
-  .pagination button {
+  .sd-pagination button {
     padding: 8px 12px;
     font-size: 12px;
   }
   
-  .limithandle {
+  .sd-limithandle {
     justify-content: center;
     gap: 10px;
   }
   
-  table {
+  .sd-table {
     font-size: 13px;
   }
   
-  th, td {
+  .sd-table th,
+  .sd-table td {
     padding: 12px 14px;
   }
   
-  .student-detail-view {
+  .sd-detail-view {
     padding: 16px;
   }
   
-  .detail-section {
+  .sd-detail-section {
     padding: 16px;
   }
   
-  .detail-grid {
+  .sd-detail-grid {
     grid-template-columns: 1fr;
   }
   
-  .profile-image {
+  .sd-profile-image {
     width: 120px;
     height: 120px;
   }
 }
 
 @media (max-width: 480px) {
-  th, td {
+  .sd-table th,
+  .sd-table td {
     padding: 10px 12px;
     font-size: 12px;
   }
   
-  .pagination span {
+  .sd-pagination span {
     font-size: 12px;
     padding: 0 8px;
   }
   
-  .limithandle {
+  .sd-limithandle {
     flex-direction: column;
     align-items: center;
   }

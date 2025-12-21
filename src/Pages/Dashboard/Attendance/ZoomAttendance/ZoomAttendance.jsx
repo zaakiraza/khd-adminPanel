@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "../../../../components/common/Toast/ToastContext";
+import * as XLSX from "xlsx";
 import "./ZoomAttendance.css";
 
 export default function ZoomAttendance() {
@@ -73,6 +74,82 @@ export default function ZoomAttendance() {
       setStudents([]);
     }
   }, [selectedClass]);
+
+  // Parse Excel file
+  const parseExcel = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          
+          // Get the first sheet
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          
+          // Convert to JSON array
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+          
+          if (jsonData.length < 2) {
+            resolve([]);
+            return;
+          }
+
+          // Find header row (first row)
+          const headers = jsonData[0].map(h => String(h).toLowerCase().trim().replace(/"/g, ''));
+          
+          let nameIndex = 0;
+          let durationIndex = -1;
+          let joinTimeIndex = -1;
+          let leaveTimeIndex = -1;
+
+          // Common Zoom Excel headers
+          headers.forEach((header, index) => {
+            const headerStr = String(header).toLowerCase();
+            if (headerStr.includes('name') || headerStr.includes('participant')) {
+              nameIndex = index;
+            }
+            if (headerStr.includes('duration') || headerStr.includes('time in meeting')) {
+              durationIndex = index;
+            }
+            if (headerStr.includes('join time') || headerStr.includes('joined')) {
+              joinTimeIndex = index;
+            }
+            if (headerStr.includes('leave time') || headerStr.includes('left')) {
+              leaveTimeIndex = index;
+            }
+          });
+
+          const participants = [];
+          for (let i = 1; i < jsonData.length; i++) {
+            const row = jsonData[i];
+            if (row.length > nameIndex) {
+              const name = String(row[nameIndex] || '').trim();
+              const duration = durationIndex >= 0 ? String(row[durationIndex] || '').trim() : '';
+              const joinTime = joinTimeIndex >= 0 ? String(row[joinTimeIndex] || '').trim() : '';
+              const leaveTime = leaveTimeIndex >= 0 ? String(row[leaveTimeIndex] || '').trim() : '';
+              
+              if (name) {
+                participants.push({
+                  name,
+                  duration: parseDuration(duration),
+                  joinTime,
+                  leaveTime,
+                  originalRow: row.join(',')
+                });
+              }
+            }
+          }
+          resolve(participants);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsArrayBuffer(file);
+    });
+  };
 
   // Parse CSV file
   const parseCSV = (text) => {
@@ -253,8 +330,12 @@ export default function ZoomAttendance() {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      if (!selectedFile.name.endsWith('.csv')) {
-        showWarning("Please upload a CSV file");
+      const fileName = selectedFile.name.toLowerCase();
+      const isValidFile = fileName.endsWith('.csv') || 
+                         fileName.endsWith('.xlsx') || 
+                         fileName.endsWith('.xls');
+      if (!isValidFile) {
+        showWarning("Please upload a CSV or Excel file (.csv, .xlsx, .xls)");
         return;
       }
       setFile(selectedFile);
@@ -273,8 +354,20 @@ export default function ZoomAttendance() {
 
     setParsing(true);
     try {
-      const text = await file.text();
-      const participants = parseCSV(text);
+      const fileName = file.name.toLowerCase();
+      let participants = [];
+
+      // Detect file type and parse accordingly
+      if (fileName.endsWith('.csv')) {
+        const text = await file.text();
+        participants = parseCSV(text);
+      } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+        participants = await parseExcel(file);
+      } else {
+        showError("Unsupported file format. Please upload a CSV or Excel file.");
+        setParsing(false);
+        return;
+      }
       
       if (participants.length === 0) {
         showError("No participants found in the file. Please check the file format.");
@@ -298,7 +391,7 @@ export default function ZoomAttendance() {
       showSuccess(`Parsed ${participants.length} participants from Zoom report`);
       setStep(2);
     } catch (error) {
-      showError("Failed to parse CSV file: " + error.message);
+      showError("Failed to parse file: " + error.message);
     } finally {
       setParsing(false);
     }
@@ -412,7 +505,7 @@ export default function ZoomAttendance() {
                 <li>Go to your Zoom account at <strong>zoom.us</strong></li>
                 <li>Navigate to <strong>Reports → Usage Reports → Meeting</strong></li>
                 <li>Find your class meeting and click on <strong>Participants</strong></li>
-                <li>Click <strong>Export with meeting data</strong> to download CSV</li>
+                <li>Click <strong>Export with meeting data</strong> to download CSV or Excel file</li>
               </ol>
             </div>
 
@@ -447,14 +540,14 @@ export default function ZoomAttendance() {
               <input
                 type="file"
                 id="zoom-csv"
-                accept=".csv"
+                accept=".csv,.xlsx,.xls"
                 onChange={handleFileChange}
                 className="file-input"
               />
               <label htmlFor="zoom-csv" className="file-label">
                 <i className="fa-solid fa-cloud-upload-alt"></i>
-                <span>{file ? file.name : 'Click or drag to upload Zoom CSV file'}</span>
-                <small>Supported format: CSV</small>
+                <span>{file ? file.name : 'Click or drag to upload Zoom attendance file'}</span>
+                <small>Supported formats: CSV, Excel (.xlsx, .xls)</small>
               </label>
             </div>
 

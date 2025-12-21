@@ -317,24 +317,18 @@ export default function ManageStatus() {
   };
 
   return (
-    <section className="container">
-      <div className="heading">
+    <section className="ms-container">
+      <div className="ms-heading">
         <h1>Manage Student Status</h1>
       </div>
-      {/* <div className="status-info">
-        <p className="info-badge">
-          <i className="fa-solid fa-info-circle"></i>
-          Showing students with: <strong>Application Accepted</strong>, <strong>Active</strong>, and <strong>Verified</strong>
-        </p>
-      </div> */}
 
       {/* Promotion Section */}
-      <div className="promotion-section">
+      <div className="ms-promotion-section">
         <h2>
           <i className="fa-solid fa-graduation-cap"></i> Promote Students
         </h2>
-        <div className="promotion-controls">
-          <div className="promotion-filter">
+        <div className="ms-promotion-controls">
+          <div className="ms-promotion-filter">
             <label htmlFor="fromClass">From Class:</label>
             <select
               id="fromClass"
@@ -355,7 +349,7 @@ export default function ManageStatus() {
           {fromClass === "null" ? (
             <>
               <button
-                className="promote-btn"
+                className="ms-promote-btn"
                 onClick={handlePromoteStudents}
                 disabled={selectedStudents.length === 0}
               >
@@ -364,7 +358,7 @@ export default function ManageStatus() {
             </>
           ) : (
             <>
-              <div className="promotion-filter">
+              <div className="ms-promotion-filter">
                 <label htmlFor="toClass">To Class:</label>
                 <select
                   id="toClass"
@@ -380,7 +374,7 @@ export default function ManageStatus() {
                 </select>
               </div>
 
-              <div className="promotion-filter">
+              <div className="ms-promotion-filter">
                 <label htmlFor="promotionYear">Year:</label>
                 <select
                   id="promotionYear"
@@ -396,7 +390,7 @@ export default function ManageStatus() {
                 </select>
               </div>
 
-              <div className="promotion-filter">
+              <div className="ms-promotion-filter">
                 <label htmlFor="promotionSession">Session:</label>
                 <select
                   id="promotionSession"
@@ -413,7 +407,7 @@ export default function ManageStatus() {
               </div>
 
               <button
-                className="promote-btn"
+                className="ms-promote-btn"
                 onClick={handlePromoteStudents}
                 disabled={selectedStudents.length === 0}
               >
@@ -425,13 +419,13 @@ export default function ManageStatus() {
 
         {/* Age Criteria Section - Only show when "Not Assigned" is selected */}
         {fromClass === "null" && (
-          <div className="age-criteria-section">
+          <div className="ms-age-criteria-section">
             <h3>
               <i className="fa-solid fa-calendar"></i> Age-Based Promotion Criteria
             </h3>
             
             {/* Year Selection for Age-Based Promotion */}
-            <div className="promotion-filter">
+            <div className="ms-promotion-filter">
               <label>Promotion Year:</label>
               <select
                 value={promotionYear}
@@ -447,7 +441,7 @@ export default function ManageStatus() {
             </div>
 
             {/* Session Selection for Age-Based Promotion */}
-            <div className="promotion-filter">
+            <div className="ms-promotion-filter">
               <label>Promotion Session:</label>
               <select
                 value={promotionSession}
@@ -463,8 +457,8 @@ export default function ManageStatus() {
             </div>
             
             {ageCriteria.map((criteria, index) => (
-              <div key={criteria.id} className="age-criteria-row">
-                <div className="age-input-group">
+              <div key={criteria.id} className="ms-age-criteria-row">
+                <div className="ms-age-input-group">
                   <label>From Age:</label>
                   <input
                     type="number"
@@ -475,7 +469,7 @@ export default function ManageStatus() {
                     placeholder="e.g., 9"
                   />
                 </div>
-                <div className="age-input-group">
+                <div className="ms-age-input-group">
                   <label>To Age:</label>
                   <input
                     type="number"
@@ -486,7 +480,7 @@ export default function ManageStatus() {
                     placeholder="e.g., 13"
                   />
                 </div>
-                <div className="age-input-group">
+                <div className="ms-age-input-group">
                   <label>Target Class:</label>
                   <select
                     value={criteria.targetClass}
@@ -502,7 +496,7 @@ export default function ManageStatus() {
                 </div>
                 {ageCriteria.length > 1 && (
                   <button
-                    className="remove-criteria-btn"
+                    className="ms-remove-criteria-btn"
                     onClick={() => removeAgeCriteria(criteria.id)}
                     title="Remove this criteria"
                   >
@@ -511,23 +505,23 @@ export default function ManageStatus() {
                 )}
               </div>
             ))}
-            <button className="add-criteria-btn" onClick={addAgeCriteria}>
+            <button className="ms-add-criteria-btn" onClick={addAgeCriteria}>
               <i className="fa-solid fa-plus"></i> Add Age Criteria
             </button>
           </div>
         )}
         
         {/* Selection Controls */}
-        <div className="selection-controls">
+        <div className="ms-selection-controls">
           <button
-            className="select-all-btn"
+            className="ms-select-all-btn"
             onClick={() => setSelectedStudents(students.map((student) => student._id))}
             disabled={students.length === 0}
           >
             <i className="fa-solid fa-check-double"></i> Select All
           </button>
           <button
-            className="unselect-all-btn"
+            className="ms-unselect-all-btn"
             onClick={() => setSelectedStudents([])}
             disabled={selectedStudents.length === 0}
           >
@@ -536,8 +530,8 @@ export default function ManageStatus() {
         </div>
       </div>
 
-      <div className="extras">
-        <div className="pagination">
+      <div className="ms-extras">
+        <div className="ms-pagination">
           <button
             disabled={page === 1}
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
@@ -556,7 +550,7 @@ export default function ManageStatus() {
             Next
           </button>
         </div>
-        <div className="limithandle">
+        <div className="ms-limithandle">
           <p>
             records: <strong>{totalUsers}</strong>
           </p>
@@ -575,7 +569,7 @@ export default function ManageStatus() {
           </select>
         </div>
       </div>
-      <div className="search">
+      <div className="ms-search">
         <input
           type="text"
           placeholder="Search by Name, Email, Phone Number"
@@ -589,7 +583,7 @@ export default function ManageStatus() {
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
-      <table>
+      <table className="ms-table">
         <thead>
           <tr>
             <th>
@@ -646,9 +640,9 @@ export default function ManageStatus() {
                 <td>{student.personal_info.whatsapp_no}</td>
                 <td>
                   {student.personal_info.enrolled_class === "null" ? (
-                    <span className="no-class-badge">Not Assigned</span>
+                    <span className="ms-no-class-badge">Not Assigned</span>
                   ) : (
-                    <span className="class-badge">
+                    <span className="ms-class-badge">
                       {student.personal_info.enrolled_class}
                     </span>
                   )}

@@ -155,35 +155,37 @@ export default function Sessions() {
   };
 
   return (
-    <section className="sessions-container">
-      <div className="heading">
-        <h1>Session Management</h1>
-        <p className="subtitle">Create and manage academic sessions</p>
+    <section className="sess-container">
+      <div className="sess-heading">
+        <div>
+          <h1>Session Management</h1>
+          <p className="subtitle">Create and manage academic sessions</p>
+        </div>
       </div>
 
       {/* Add Button */}
-      <div className="action-bar">
-        <button className="add-session-btn" onClick={handleAdd}>
+      <div className="sess-action-bar">
+        <button className="sess-add-btn" onClick={handleAdd}>
           <i className="fa-solid fa-plus"></i> Add New Session
         </button>
       </div>
 
       {loading ? (
-        <div className="loading-state">
+        <div className="sess-loading-state">
           <i className="fa-solid fa-spinner fa-spin"></i>
           <p>Loading sessions...</p>
         </div>
       ) : sessions.length > 0 ? (
         <>
-          <div className="sessions-grid">
+          <div className="sess-grid">
             {sessions.map((session) => (
               <div
                 key={session._id}
-                className={`session-card ${session.isActive ? "active" : "inactive"}`}
+                className={`sess-card ${session.isActive ? "active" : "inactive"}`}
               >
-                <div className="card-header">
+                <div className="sess-card-header">
                   <h3>{session.session_name}</h3>
-                  <span className={`status-badge ${session.isActive ? "active" : "inactive"}`}>
+                  <span className={`sess-status-badge ${session.isActive ? "active" : "inactive"}`}>
                     {session.isActive ? (
                       <>
                         <i className="fa-solid fa-check-circle"></i> Active
@@ -196,22 +198,22 @@ export default function Sessions() {
                   </span>
                 </div>
 
-                <div className="card-actions">
+                <div className="sess-card-actions">
                   <button
-                    className="edit-btn"
+                    className="sess-edit-btn"
                     onClick={() => handleEdit(session)}
                   >
                     <i className="fa-solid fa-pen"></i> Edit
                   </button>
                   <button
-                    className={`toggle-btn ${session.isActive ? "deactivate" : "activate"}`}
+                    className={`sess-toggle-btn ${session.isActive ? "deactivate" : "activate"}`}
                     onClick={() => handleToggleStatus(session)}
                   >
                     <i className={`fa-solid fa-${session.isActive ? "toggle-on" : "toggle-off"}`}></i>
                     {session.isActive ? "Deactivate" : "Activate"}
                   </button>
                   <button
-                    className="delete-btn"
+                    className="sess-delete-btn"
                     onClick={() => handleDelete(session._id)}
                   >
                     <i className="fa-solid fa-trash"></i> Delete
@@ -222,32 +224,32 @@ export default function Sessions() {
           </div>
 
           {/* Summary */}
-          <div className="summary-card">
+          <div className="sess-summary-card">
             <h3>
               <i className="fa-solid fa-chart-pie"></i> Summary
             </h3>
-            <div className="summary-stats">
-              <div className="stat-box">
-                <span className="stat-number">{sessions.length}</span>
-                <span className="stat-label">Total Sessions</span>
+            <div className="sess-summary-stats">
+              <div className="sess-stat-box">
+                <span className="sess-stat-number">{sessions.length}</span>
+                <span className="sess-stat-label">Total Sessions</span>
               </div>
-              <div className="stat-box active">
-                <span className="stat-number">
+              <div className="sess-stat-box active">
+                <span className="sess-stat-number">
                   {sessions.filter((s) => s.isActive).length}
                 </span>
-                <span className="stat-label">Active Sessions</span>
+                <span className="sess-stat-label">Active Sessions</span>
               </div>
-              <div className="stat-box inactive">
-                <span className="stat-number">
+              <div className="sess-stat-box inactive">
+                <span className="sess-stat-number">
                   {sessions.filter((s) => !s.isActive).length}
                 </span>
-                <span className="stat-label">Inactive Sessions</span>
+                <span className="sess-stat-label">Inactive Sessions</span>
               </div>
             </div>
           </div>
         </>
       ) : (
-        <div className="empty-state">
+        <div className="sess-empty-state">
           <i className="fa-solid fa-calendar-xmark"></i>
           <p>No sessions found</p>
           <span>Click "Add New Session" to create your first session</span>
@@ -256,20 +258,20 @@ export default function Sessions() {
 
       {/* Add/Edit Modal */}
       {showAddModal && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className="sess-modal-overlay" onClick={handleCloseModal}>
+          <div className="sess-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="sess-modal-header">
               <h2>
                 <i className="fa-solid fa-calendar-plus"></i>{" "}
                 {editingSession ? "Edit Session" : "Add New Session"}
               </h2>
-              <button className="close-btn" onClick={handleCloseModal}>
+              <button className="sess-close-btn" onClick={handleCloseModal}>
                 <i className="fa-solid fa-times"></i>
               </button>
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="sess-form-group">
                 <label htmlFor="session-name">
                   <i className="fa-solid fa-tag"></i> Session Name:
                 </label>
@@ -285,14 +287,14 @@ export default function Sessions() {
                 />
               </div>
 
-              <div className="form-actions">
-                <button type="submit" className="submit-btn">
+              <div className="sess-form-actions">
+                <button type="submit" className="sess-submit-btn">
                   <i className="fa-solid fa-check"></i>{" "}
                   {editingSession ? "Update Session" : "Add Session"}
                 </button>
                 <button
                   type="button"
-                  className="cancel-btn"
+                  className="sess-cancel-btn"
                   onClick={handleCloseModal}
                 >
                   <i className="fa-solid fa-times"></i> Cancel

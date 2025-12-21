@@ -188,44 +188,46 @@ export default function Classes() {
   };
 
   return (
-    <section className="classes-container">
-      <div className="heading">
-        <h1>Class Management</h1>
-        <p className="subtitle">Create and manage academic classes</p>
+    <section className="cls-container">
+      <div className="cls-heading">
+        <div>
+          <h1>Class Management</h1>
+          <p className="cls-subtitle">Create and manage academic classes</p>
+        </div>
       </div>
 
       {/* Add Button */}
-      <div className="action-bar">
-        <button className="add-class-btn" onClick={handleAdd}>
+      <div className="cls-action-bar">
+        <button className="cls-add-btn" onClick={handleAdd}>
           <i className="fa-solid fa-plus"></i> Add New Class
         </button>
       </div>
 
       {loading ? (
-        <div className="loading-state">
+        <div className="cls-loading-state">
           <i className="fa-solid fa-spinner fa-spin"></i>
           <p>Loading classes...</p>
         </div>
       ) : classes.length > 0 ? (
         <>
-          <div className="classes-grid">
+          <div className="cls-grid">
             {classes.map((classData) => (
               <div
                 key={classData._id}
-                className={`class-card ${classData.isActive ? "active" : "inactive"}`}
+                className={`cls-card ${classData.isActive ? "active" : "inactive"}`}
               >
-                <div className="card-header">
-                  <div className="class-info">
+                <div className="cls-card-header">
+                  <div className="cls-class-info">
                     <h3>{classData.class_name}</h3>
                     {classData.teacher_assigned && (
-                      <span className="teacher-badge">
+                      <span className="cls-teacher-badge">
                         <i className="fa-solid fa-chalkboard-user"></i>{" "}
                         {classData.teacher_assigned}
                       </span>
                     )}
                   </div>
                   <span
-                    className={`status-badge ${classData.isActive ? "active" : "inactive"}`}
+                    className={`cls-status-badge ${classData.isActive ? "active" : "inactive"}`}
                   >
                     {classData.isActive ? (
                       <>
@@ -239,45 +241,45 @@ export default function Classes() {
                   </span>
                 </div>
 
-                <div className="class-details">
-                  <div className="detail-item">
+                <div className="cls-details">
+                  <div className="cls-detail-item">
                     <i className="fa-solid fa-calendar-days"></i>
                     <div>
-                      <span className="label">Day</span>
-                      <span className="value">
+                      <span className="cls-label">Day</span>
+                      <span className="cls-value">
                         {classData.class_day || "Not Set"}
                       </span>
                     </div>
                   </div>
-                  <div className="detail-item">
+                  <div className="cls-detail-item">
                     <i className="fa-solid fa-clock"></i>
                     <div>
-                      <span className="label">Time</span>
-                      <span className="value">
+                      <span className="cls-label">Time</span>
+                      <span className="cls-value">
                         {formatTime(classData.class_timing)}
                       </span>
                     </div>
                   </div>
-                  <div className="detail-item">
+                  <div className="cls-detail-item">
                     <i className="fa-solid fa-users"></i>
                     <div>
-                      <span className="label">Students</span>
-                      <span className="value">
+                      <span className="cls-label">Students</span>
+                      <span className="cls-value">
                         {classData.students_enrolled || 0}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="card-actions">
+                <div className="cls-card-actions">
                   <button
-                    className="edit-btn"
+                    className="cls-edit-btn"
                     onClick={() => handleEdit(classData)}
                   >
                     <i className="fa-solid fa-pen"></i> Edit
                   </button>
                   <button
-                    className={`toggle-btn ${classData.isActive ? "deactivate" : "activate"}`}
+                    className={`cls-toggle-btn ${classData.isActive ? "deactivate" : "activate"}`}
                     onClick={() => handleToggleStatus(classData)}
                   >
                     <i
@@ -286,7 +288,7 @@ export default function Classes() {
                     {classData.isActive ? "Deactivate" : "Activate"}
                   </button>
                   <button
-                    className="delete-btn"
+                    className="cls-delete-btn"
                     onClick={() => handleDelete(classData._id)}
                   >
                     <i className="fa-solid fa-trash"></i> Delete
@@ -297,42 +299,42 @@ export default function Classes() {
           </div>
 
           {/* Summary */}
-          <div className="summary-card">
+          <div className="cls-summary-card">
             <h3>
               <i className="fa-solid fa-chart-pie"></i> Summary
             </h3>
-            <div className="summary-stats">
-              <div className="stat-box">
-                <span className="stat-number">{classes.length}</span>
-                <span className="stat-label">Total Classes</span>
+            <div className="cls-summary-stats">
+              <div className="cls-stat-box">
+                <span className="cls-stat-number">{classes.length}</span>
+                <span className="cls-stat-label">Total Classes</span>
               </div>
-              <div className="stat-box active">
-                <span className="stat-number">
+              <div className="cls-stat-box active">
+                <span className="cls-stat-number">
                   {classes.filter((c) => c.isActive).length}
                 </span>
-                <span className="stat-label">Active Classes</span>
+                <span className="cls-stat-label">Active Classes</span>
               </div>
-              <div className="stat-box inactive">
-                <span className="stat-number">
+              <div className="cls-stat-box inactive">
+                <span className="cls-stat-number">
                   {classes.filter((c) => !c.isActive).length}
                 </span>
-                <span className="stat-label">Inactive Classes</span>
+                <span className="cls-stat-label">Inactive Classes</span>
               </div>
-              <div className="stat-box scheduled">
-                <span className="stat-number">
+              <div className="cls-stat-box scheduled">
+                <span className="cls-stat-number">
                   {
                     classes.filter(
                       (c) => c.class_timing && c.class_day
                     ).length
                   }
                 </span>
-                <span className="stat-label">Scheduled</span>
+                <span className="cls-stat-label">Scheduled</span>
               </div>
             </div>
           </div>
         </>
       ) : (
-        <div className="empty-state">
+        <div className="cls-empty-state">
           <i className="fa-solid fa-school"></i>
           <p>No classes found</p>
           <span>Click "Add New Class" to create your first class</span>
@@ -341,23 +343,23 @@ export default function Classes() {
 
       {/* Add/Edit Modal */}
       {showAddModal && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className="cls-modal-overlay" onClick={handleCloseModal}>
+          <div className="cls-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="cls-modal-header">
               <h2>
                 <i className="fa-solid fa-school"></i>{" "}
                 {editingClass ? "Edit Class" : "Add New Class"}
               </h2>
-              <button className="close-btn" onClick={handleCloseModal}>
+              <button className="cls-close-btn" onClick={handleCloseModal}>
                 <i className="fa-solid fa-times"></i>
               </button>
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="cls-form-group">
                 <label htmlFor="class-name">
                   <i className="fa-solid fa-tag"></i> Class Name:
-                  <span className="required">*</span>
+                  <span className="cls-required">*</span>
                 </label>
                 <input
                   type="text"
@@ -372,7 +374,7 @@ export default function Classes() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="cls-form-group">
                 <label htmlFor="teacher-assigned">
                   <i className="fa-solid fa-chalkboard-user"></i> Teacher
                   Assigned:
@@ -391,8 +393,8 @@ export default function Classes() {
                 />
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
+              <div className="cls-form-row">
+                <div className="cls-form-group">
                   <label htmlFor="class-day">
                     <i className="fa-solid fa-calendar-days"></i> Class Day:
                   </label>
@@ -412,7 +414,7 @@ export default function Classes() {
                   </select>
                 </div>
 
-                <div className="form-group">
+                <div className="cls-form-group">
                   <label htmlFor="class-timing">
                     <i className="fa-solid fa-clock"></i> Class Timing:
                   </label>
@@ -427,14 +429,14 @@ export default function Classes() {
                 </div>
               </div>
 
-              <div className="form-actions">
-                <button type="submit" className="submit-btn">
+              <div className="cls-form-actions">
+                <button type="submit" className="cls-submit-btn">
                   <i className="fa-solid fa-check"></i>{" "}
                   {editingClass ? "Update Class" : "Add Class"}
                 </button>
                 <button
                   type="button"
-                  className="cancel-btn"
+                  className="cls-cancel-btn"
                   onClick={handleCloseModal}
                 >
                   <i className="fa-solid fa-times"></i> Cancel

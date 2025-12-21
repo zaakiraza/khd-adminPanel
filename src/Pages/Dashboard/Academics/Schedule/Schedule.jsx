@@ -164,41 +164,43 @@ export default function Schedule() {
   };
 
   return (
-    <section className="schedule-container">
-      <div className="heading">
-        <h1>Class Schedule</h1>
-        <p className="subtitle">View weekly timetable for all active classes</p>
+    <section className="sched-container">
+      <div className="sched-heading">
+        <div>
+          <h1>Class Schedule</h1>
+          <p className="subtitle">View weekly timetable for all active classes</p>
+        </div>
       </div>
 
       {/* Toolbar */}
-      <div className="toolbar">
-        <div className="view-toggle">
+      <div className="sched-toolbar">
+        <div className="sched-view-toggle">
           <button
-            className={`toggle-btn ${viewMode === "weekly" ? "active" : ""}`}
+            className={`sched-toggle-btn ${viewMode === "weekly" ? "active" : ""}`}
             onClick={() => setViewMode("weekly")}
           >
             <i className="fa-solid fa-calendar-week"></i> Weekly View
           </button>
           <button
-            className={`toggle-btn ${viewMode === "list" ? "active" : ""}`}
+            className={`sched-toggle-btn ${viewMode === "list" ? "active" : ""}`}
             onClick={() => setViewMode("list")}
           >
             <i className="fa-solid fa-list"></i> List View
           </button>
         </div>
 
-        <div className="action-buttons">
-          <button className="action-btn print" onClick={handlePrint}>
+        <div className="sched-action-buttons">
+          <button className="sched-action-btn print" onClick={handlePrint}>
             <i className="fa-solid fa-print"></i> Print
           </button>
-          <button className="action-btn export" onClick={handleExport}>
+          <button className="sched-action-btn export" onClick={handleExport}>
             <i className="fa-solid fa-download"></i> Export CSV
           </button>
         </div>
       </div>
 
       {loading ? (
-        <div className="loading-state">
+        <div className="sched-loading-state">
           <i className="fa-solid fa-spinner fa-spin"></i>
           <p>Loading schedule...</p>
         </div>
@@ -206,25 +208,25 @@ export default function Schedule() {
         <>
           {viewMode === "weekly" ? (
             // Weekly Calendar View
-            <div className="weekly-view">
+            <div className="sched-weekly-view">
               {daysOfWeek.map((day) => {
                 const dayClasses = getClassesForDay(day);
                 return (
-                  <div key={day} className="day-column">
-                    <div className="day-header">
+                  <div key={day} className="sched-day-column">
+                    <div className="sched-day-header">
                       <h3>{day}</h3>
-                      <span className="class-count">
+                      <span className="sched-class-count">
                         {dayClasses.length}{" "}
                         {dayClasses.length === 1 ? "class" : "classes"}
                       </span>
                     </div>
-                    <div className="day-classes">
+                    <div className="sched-day-classes">
                       {dayClasses.length > 0 ? (
                         dayClasses.map((cls) => (
-                          <div key={cls._id} className="class-card">
+                          <div key={cls._id} className="sched-class-card">
                             {editingClass && editingClass._id === cls._id ? (
-                              <div className="edit-form-inline">
-                                <div className="form-group-inline">
+                              <div className="sched-edit-form-inline">
+                                <div className="sched-form-group-inline">
                                   <label>Day:</label>
                                   <select
                                     value={formData.class_day}
@@ -239,7 +241,7 @@ export default function Schedule() {
                                     ))}
                                   </select>
                                 </div>
-                                <div className="form-group-inline">
+                                <div className="sched-form-group-inline">
                                   <label>Time:</label>
                                   <input
                                     type="time"
@@ -249,15 +251,15 @@ export default function Schedule() {
                                     }
                                   />
                                 </div>
-                                <div className="inline-actions">
+                                <div className="sched-inline-actions">
                                   <button
-                                    className="save-inline-btn"
+                                    className="sched-save-inline-btn"
                                     onClick={handleSaveSchedule}
                                   >
                                     <i className="fa-solid fa-check"></i>
                                   </button>
                                   <button
-                                    className="cancel-inline-btn"
+                                    className="sched-cancel-inline-btn"
                                     onClick={handleCancelEdit}
                                   >
                                     <i className="fa-solid fa-times"></i>
@@ -266,13 +268,13 @@ export default function Schedule() {
                               </div>
                             ) : (
                               <>
-                                <div className="card-header-inline">
-                                  <div className="time-badge">
+                                <div className="sched-card-header-inline">
+                                  <div className="sched-time-badge">
                                     <i className="fa-solid fa-clock"></i>
                                     {formatTime(cls.class_timing)}
                                   </div>
                                   <button
-                                    className="edit-icon-btn"
+                                    className="sched-edit-icon-btn"
                                     onClick={() => handleEditSchedule(cls)}
                                     title="Edit Schedule"
                                   >
@@ -291,7 +293,7 @@ export default function Schedule() {
                           </div>
                         ))
                       ) : (
-                        <div className="no-classes">
+                        <div className="sched-no-classes">
                           <i className="fa-solid fa-calendar-xmark"></i>
                           <span>No classes</span>
                         </div>
@@ -303,9 +305,9 @@ export default function Schedule() {
             </div>
           ) : (
             // List View
-            <div className="list-view">
-              <div className="schedule-table-container">
-                <table className="schedule-table">
+            <div className="sched-list-view">
+              <div className="sched-table-container">
+                <table className="sched-table">
                   <thead>
                     <tr>
                       <th>Time</th>
@@ -322,33 +324,33 @@ export default function Schedule() {
                           {idx === 0 && (
                             <td
                               rowSpan={timeClasses.length}
-                              className="time-cell"
+                              className="sched-time-cell"
                             >
-                              <div className="time-display">
+                              <div className="sched-time-display">
                                 <i className="fa-solid fa-clock"></i>
                                 {formatTime(time)}
                               </div>
                             </td>
                           )}
                           <td>
-                            <span className="day-badge">{cls.class_day}</span>
+                            <span className="sched-day-badge">{cls.class_day}</span>
                           </td>
                           <td>
-                            <span className="class-name">{cls.class_name}</span>
+                            <span className="sched-class-name">{cls.class_name}</span>
                           </td>
                           <td>
                             {cls.teacher_assigned ? (
-                              <span className="teacher-name">
+                              <span className="sched-teacher-name">
                                 <i className="fa-solid fa-chalkboard-user"></i>
                                 {cls.teacher_assigned}
                               </span>
                             ) : (
-                              <span className="not-assigned">Not Assigned</span>
+                              <span className="sched-not-assigned">Not Assigned</span>
                             )}
                           </td>
                           <td>
                             <button
-                              className="edit-table-btn"
+                              className="sched-edit-table-btn"
                               onClick={() => handleEditSchedule(cls)}
                               title="Edit Schedule"
                             >
@@ -365,22 +367,22 @@ export default function Schedule() {
           )}
 
           {/* Statistics */}
-          <div className="statistics-card">
+          <div className="sched-statistics-card">
             <h3>
               <i className="fa-solid fa-chart-bar"></i> Schedule Statistics
             </h3>
-            <div className="stats-grid">
-              <div className="stat-item">
+            <div className="sched-stats-grid">
+              <div className="sched-stat-item">
                 <i className="fa-solid fa-school"></i>
                 <div>
-                  <span className="stat-value">{classes.length}</span>
-                  <span className="stat-label">Total Scheduled Classes</span>
+                  <span className="sched-stat-value">{classes.length}</span>
+                  <span className="sched-stat-label">Total Scheduled Classes</span>
                 </div>
               </div>
-              <div className="stat-item">
+              <div className="sched-stat-item">
                 <i className="fa-solid fa-chalkboard-user"></i>
                 <div>
-                  <span className="stat-value">
+                  <span className="sched-stat-value">
                     {
                       new Set(
                         classes
@@ -389,23 +391,23 @@ export default function Schedule() {
                       ).size
                     }
                   </span>
-                  <span className="stat-label">Teachers Assigned</span>
+                  <span className="sched-stat-label">Teachers Assigned</span>
                 </div>
               </div>
-              <div className="stat-item">
+              <div className="sched-stat-item">
                 <i className="fa-solid fa-calendar-check"></i>
                 <div>
-                  <span className="stat-value">
+                  <span className="sched-stat-value">
                     {daysOfWeek.filter((day) => getClassesForDay(day).length > 0).length}
                   </span>
-                  <span className="stat-label">Active Days</span>
+                  <span className="sched-stat-label">Active Days</span>
                 </div>
               </div>
             </div>
           </div>
         </>
       ) : (
-        <div className="empty-state">
+        <div className="sched-empty-state">
           <i className="fa-solid fa-calendar-xmark"></i>
           <p>No scheduled classes found</p>
           <span>Please set schedules for your classes in the TimeTable section</span>
@@ -414,19 +416,19 @@ export default function Schedule() {
 
       {/* Edit Modal */}
       {editingClass && viewMode === "list" && (
-        <div className="modal-overlay" onClick={handleCancelEdit}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className="sched-modal-overlay" onClick={handleCancelEdit}>
+          <div className="sched-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="sched-modal-header">
               <h2>
                 <i className="fa-solid fa-pen"></i> Edit Schedule - {editingClass.class_name}
               </h2>
-              <button className="close-btn" onClick={handleCancelEdit}>
+              <button className="sched-close-btn" onClick={handleCancelEdit}>
                 <i className="fa-solid fa-times"></i>
               </button>
             </div>
 
-            <div className="modal-form">
-              <div className="form-group">
+            <div className="sched-modal-form">
+              <div className="sched-form-group">
                 <label htmlFor="edit-day">
                   <i className="fa-solid fa-calendar-days"></i> Class Day:
                 </label>
@@ -445,7 +447,7 @@ export default function Schedule() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className="sched-form-group">
                 <label htmlFor="edit-time">
                   <i className="fa-solid fa-clock"></i> Class Time:
                 </label>
@@ -459,15 +461,15 @@ export default function Schedule() {
                 />
               </div>
 
-              <div className="form-actions">
+              <div className="sched-form-actions">
                 <button
-                  className="submit-btn"
+                  className="sched-submit-btn"
                   onClick={handleSaveSchedule}
                 >
                   <i className="fa-solid fa-check"></i> Save Changes
                 </button>
                 <button
-                  className="cancel-btn"
+                  className="sched-cancel-btn"
                   onClick={handleCancelEdit}
                 >
                   <i className="fa-solid fa-times"></i> Cancel
